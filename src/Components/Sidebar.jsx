@@ -24,7 +24,7 @@ import { SiYoutubekids } from "react-icons/si";
 const Sidebar = ({hamburger}) => {
   return (
     
-    ( hamburger && <div className='hidden w-[250px] h-[calc(100vh-80px)] md:flex md:flex-col px-2.5 overflow-y-auto overflow-x-hidden'>
+    ( hamburger && <div className='absolute bg-white w-[250px] h-[calc(100vh-80px)] md:static md:flex md:flex-col px-2.5 overflow-y-auto overflow-x-hidden'>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><IoMdHome className='w-[25px] h-[25px] -translate-y-[3px]'/><span className='ml-[20px]'>Home</span></button>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><SiYoutubeshorts className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Shorts</span></button>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><MdOutlineSubscriptions className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Subscriptions</span></button>
@@ -56,7 +56,7 @@ const Sidebar = ({hamburger}) => {
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><SiYoutubekids  className='w-[20px] h-[20px] text-red-600'/><span className='ml-[20px]'>Youtube Kids</span></button>
     </div>) ||
     (!hamburger &&
-    <div className='md:flex md:flex-col'>
+    <div className=' hidden md:flex md:flex-col bg-white'>
         <button className='my-3 text-[12px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100'><IoMdHome className='w-[25px] h-[25px] '/><span>Home</span></button>
         <button className='my-3 text-[12px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100'><SiYoutubeshorts className='w-[25px] h-[25px] '/><span>Shorts</span></button>
         <button className='my-3 text-[10px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100'><MdOutlineSubscriptions className='w-[25px] h-[25px] '/><span>Subscriptions</span></button>

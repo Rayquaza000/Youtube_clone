@@ -10,8 +10,8 @@ import { CgProfile } from "react-icons/cg";
 
 
 
-const Header = ({setHamburger, hamburger}) => {
-    const [signedIn,setSignedIn]=useState(true);
+const Header = ({setHamburger, hamburger,signedIn,setSignedIn}) => {
+    
     
   return (
     <div className='flex flex-row w-full h-[80px] items-center justify-between'>

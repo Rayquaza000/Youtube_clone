@@ -9,23 +9,24 @@ import Sidebar from './Components/Sidebar'
 
 function App() {
 
+  const [hamburger,setHamburger]=useState(true);
+  const [signedIn,setSignedIn]=useState(false);
+
   const appRouter = createBrowserRouter([
     {
       path:"/",
-      element:<Home/>
+      element:<Home signedIn={signedIn} hamburger={hamburger}/>
     }
   ]);
 
-  const [hamburger,setHamburger]=useState(true);
+  
 
   return (
     <div>
-      <Header setHamburger={setHamburger} hamburger={hamburger}/>
+      <Header setHamburger={setHamburger} hamburger={hamburger} signedIn={signedIn} setSignedIn={setSignedIn}/>
       <div className='flex flex-row'>
-      <Sidebar hamburger={hamburger}/>
-      <div>
+        <Sidebar hamburger={hamburger}/>
         <RouterProvider router={appRouter}/>
-      </div>
       </div>
     </div>
   );
