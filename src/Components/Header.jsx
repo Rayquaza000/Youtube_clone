@@ -5,20 +5,22 @@ import { IoSearchOutline } from "react-icons/io5";
 import { FaMicrophone } from "react-icons/fa6";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 
 const Header = ({setHamburger, hamburger,signedIn,setSignedIn}) => {
-    
+    const navigate=useNavigate();
+
     
   return (
     <div className='flex flex-row w-full h-[80px] items-center justify-between'>
         <div className='flex flex-row w-1/2 h-full items-center sm:w-1/3'>
             <GiHamburgerMenu className='w-[25px] h-[40px] ml-[30px]' onClick={()=>setHamburger(!hamburger)}/>
             <img src={youtube_icon} className='w-[35px] h-[20px] ml-[15px]'/>
-            <span className='font-bold text-[20px]'>YouTube<sup className='font-normal text-[14px]'>IN</sup></span>
+            <span className='font-bold text-[20px]' onClick={()=>{navigate("/")}} >YouTube<sup className='font-normal text-[14px]'>IN</sup></span>
         </div>
         <div className='flex flex-row w-0 h-full items-center sm:w-1/3 sm:py-[10px] sm:px-[10px] overflow-hidden md:w-5/12'>
             <input className='w-2/3 h-[40px] bg-white border-solid border-gray-400 border-[1px] rounded-l-2xl' type="text" placeholder=" Search"></input>

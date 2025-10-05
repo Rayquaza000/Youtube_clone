@@ -26,7 +26,7 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
                             <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}> &nbsp;{daysAgo} days ago</span>
                         </div>
                     </div>
-                    <PiDotsThreeVerticalBold />
+                    <PiDotsThreeVerticalBold className='w-15 h-15 self-start'/>
                 </div>
                 <div>
 

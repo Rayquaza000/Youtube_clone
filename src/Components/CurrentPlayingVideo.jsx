@@ -62,7 +62,7 @@ function CurrentPlayingVideo() {
           {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          const result=await response.json();
+          const result=await response.json();   
             setVideosData(result);
           
         }catch(error){
@@ -117,7 +117,7 @@ function CurrentPlayingVideo() {
             return <VideoSelections alignment={decideRowOrColumn} key={index} videoID={data.videoID} title={data.title} thumbnailURL={data.thumbnailURL} channelName={data.channelName} channelProfilePicture={data.channelProfilePicture} views={data.views} daysAgo={parseInt((todaysDate.getTime()- videoUploadDateInMilli)/(24*60*60*1000))}/>
         })}
     </div>
-    <div className='w-[100%] flex flex-col [grid-area:comments] sm:pl-3 md:pl-3 sm:pr-7 md:pr-7'>
+    <div className='w-[100%] flex flex-col [grid-area:comments] sm:pl-3 md:pl-3 sm:pr-7 md:pr-7 lg:pl-20'>
         <div className='flex flex-row'>
             <span className='font-bold text-[20px]'>{oneVideo.comments.length} comments</span>
             <button className='flex flex-row ml-4 items-center'><MdOutlineSort className='w-[25px] h-[25px]'/> Sort by</button>

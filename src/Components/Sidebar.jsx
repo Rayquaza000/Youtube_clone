@@ -18,13 +18,14 @@ import { AiFillYoutube } from "react-icons/ai";
 import { SiYoutubemusic } from "react-icons/si";
 import { TbBrandYoutubeKids } from "react-icons/tb";
 import { SiYoutubekids } from "react-icons/si";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 
 const Sidebar = ({hamburger}) => {
   const location = useLocation();
   const currentPath=location.pathname;
+  const navigate=useNavigate();
   let bigMenu='';
   let smallMenu='';
   if(currentPath.slice(0,20)=="/currentplayingvideo")
@@ -40,7 +41,7 @@ const Sidebar = ({hamburger}) => {
   return (
     
     ( hamburger && <div className={bigMenu}>
-        <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><IoMdHome className='w-[25px] h-[25px] -translate-y-[3px]'/><span className='ml-[20px]'>Home</span></button>
+        <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100' onClick={()=>{navigate("/")}}><IoMdHome className='w-[25px] h-[25px] -translate-y-[3px]'/><span className='ml-[20px]'>Home</span></button>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><SiYoutubeshorts className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Shorts</span></button>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><MdOutlineSubscriptions className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Subscriptions</span></button>
         <hr className='text-gray-300 my-1.5'></hr>
@@ -72,7 +73,7 @@ const Sidebar = ({hamburger}) => {
     </div>) ||
     (!hamburger &&
     <div className={smallMenu}>
-        <button className='my-3 text-[12px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100'><IoMdHome className='w-[25px] h-[25px] '/><span>Home</span></button>
+        <button className='my-3 text-[12px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100' onClick={()=>{navigate("/")}}><IoMdHome className='w-[25px] h-[25px] '/><span>Home</span></button>
         <button className='my-3 text-[12px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100'><SiYoutubeshorts className='w-[25px] h-[25px] '/><span>Shorts</span></button>
         <button className='my-3 text-[10px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100'><MdOutlineSubscriptions className='w-[25px] h-[25px] '/><span>Subscriptions</span></button>
         <button className='my-3 text-[12px] active:bg-gray-100 rounded-[5px] flex flex-col items-center p-1 mx-2 hover:bg-gray-100'><CgProfile className='w-[25px] h-[25px] '/><span>You</span></button>
