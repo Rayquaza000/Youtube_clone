@@ -6,16 +6,21 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './Components/Home'
 import Header from './Components/Header'
 import Sidebar from './Components/Sidebar'
+import CurrentPlayingVideo from './Components/CurrentPlayingVideo'
 
 function App() {
 
-  const [hamburger,setHamburger]=useState(true);
+  const [hamburger,setHamburger]=useState(false);
   const [signedIn,setSignedIn]=useState(false);
 
   const appRouter = createBrowserRouter([
     {
       path:"/",
-      element:<Home signedIn={signedIn} hamburger={hamburger}/>
+      element: (<><Sidebar hamburger={hamburger}/> <Home signedIn={signedIn} hamburger={hamburger}/></>)
+    },
+    {
+      path:"/currentplayingvideo/:id",
+      element:(<><Sidebar hamburger={hamburger}/> <CurrentPlayingVideo/></>)
     }
   ]);
 
@@ -24,8 +29,8 @@ function App() {
   return (
     <div>
       <Header setHamburger={setHamburger} hamburger={hamburger} signedIn={signedIn} setSignedIn={setSignedIn}/>
-      <div className='flex flex-row'>
-        <Sidebar hamburger={hamburger}/>
+      <div className='flex flex-row h-fit'>
+        
         <RouterProvider router={appRouter}/>
       </div>
     </div>

@@ -40,10 +40,8 @@ const Home = ({ signedIn, hamburger }) => {
   return (
     <div className={homeWidth} id="home">
       {videosData && videosData.map((data,index)=>{
-        const videoUploadDate=new Date("2025-09-30");
+        const videoUploadDate=new Date(data.uploadDate);
         const videoUploadDateInMilli=videoUploadDate.getTime()
-        console.log(todaysDate.getTime());
-        console.log(videoUploadDate.getTime())
         return <VideoSelections alignment="col" key={index} videoID={data.videoID} title={data.title} thumbnailURL={data.thumbnailURL} channelName={data.channelName} channelProfilePicture={data.channelProfilePicture} views={data.views} daysAgo={parseInt((todaysDate.getTime()- videoUploadDateInMilli)/(24*60*60*1000))}/>
       })}
     </div>
