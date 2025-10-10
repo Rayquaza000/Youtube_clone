@@ -1,7 +1,7 @@
 import React from 'react';
 import { IoMdHome } from "react-icons/io";
 import { SiYoutubeshorts } from "react-icons/si";
-import { MdOutlineSubscriptions } from "react-icons/md";
+import { MdOutlineSubscriptions, MdOutlineWatchLater } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { MdHistory } from "react-icons/md";
 import { LuShoppingBag } from "react-icons/lu";
@@ -19,10 +19,12 @@ import { SiYoutubemusic } from "react-icons/si";
 import { TbBrandYoutubeKids } from "react-icons/tb";
 import { SiYoutubekids } from "react-icons/si";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { MdOutlinePlaylistPlay } from "react-icons/md";
+import { GoVideo } from 'react-icons/go';
 
 
 
-const Sidebar = ({hamburger}) => {
+const Sidebar = ({hamburger,user,signedIn}) => {
   const location = useLocation();
   const currentPath=location.pathname;
   const navigate=useNavigate();
@@ -47,12 +49,19 @@ const Sidebar = ({hamburger}) => {
         <hr className='text-gray-300 my-1.5'></hr>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><CgProfile className='w-[20px] h-[20px] -translate-y-[1px] '/><span className='ml-[20px]'>You</span></button>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><MdHistory className='w-[20px] h-[20px] -translate-y-[1px] '/><span className='ml-[20px]'>History</span></button>
+        {!signedIn && <div className='w-full h-fit flex flex-col'>
         <hr className='text-gray-300 my-1.5'></hr>
         <span className='flex flex-row items-center p-1 px-6'>Sign in to like videos, comment and subscribe.</span>
         <div className='flex flex-row w-fit h-[30px] items-center justify-center border-gray-300 border-solid border-[1px] ml-[20px] rounded-2xl'>
             <CgProfile className='w-[19px] h-[19px] m-[3px] ml-[5px] text-blue-600'/>
             <span className='mr-[10px] text-blue-600'>Sign in</span>
         </div>
+        </div>}
+        {signedIn && <div className='w-full h-fit flex flex-col'>
+          <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><MdOutlinePlaylistPlay className='w-[20px] h-[20px] -translate-y-[1px] '/><span className='ml-[20px]'>Playlists</span></button>
+          <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><GoVideo className='w-[20px] h-[20px] -translate-y-[1px] '/><span className='ml-[20px]'>Your videos</span></button>
+          <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><MdOutlineWatchLater className='w-[20px] h-[20px] -translate-y-[1px] '/><span className='ml-[20px]'>Watch later</span></button>
+          </div>}
         <hr className='text-gray-300 my-1.5'></hr>
         <span className='ml-[20px] my-[5px] font-bold'>Explore</span>
         <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 hover:bg-gray-100'><LuShoppingBag className='w-[20px] h-[20px]'/><span className='ml-[20px]'>Shopping</span></button>

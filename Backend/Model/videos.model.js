@@ -62,23 +62,22 @@ const videoSchema=mongoose.Schema({
     },
     views:{
         type:Number,
+        required:true,
         default:0
     },
     likes:{
         type:Number,
+        required:true,
         default:0
     },
     dislikes:{
         type:Number,
+        required:true,
         default:0
     },
     uploadDate:{
-        type:String
-    },
-    subscribers:{
-        type:Number,
-        required:true,
-        default:0
+        type:String,
+        required:true
     },
     comments:[commentSchema]
 

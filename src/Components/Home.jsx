@@ -5,7 +5,7 @@ import useWindowSize from '../CustomHooks/useWindowSize';
 const Home = ({ signedIn, hamburger }) => {
   const { width,height } = useWindowSize();
   const [videosData,setVideosData]=useState(null);
-  const todaysDate=new Date()
+  const todaysDate=new Date();
   let homeWidth = '';
 
   if (width <= 767) {

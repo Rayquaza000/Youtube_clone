@@ -1,12 +1,19 @@
 import { Video_data } from "../Model/videos.model.js";
 import { User_data } from "../Model/users.model.js";
-
+import { Id_data } from "../Model/ids.model.js";
+import jsonwebtoken from "jsonwebtoken";
 export async function getHomeVideos(req,res){
+    try{
     const homeVideos=await Video_data.find();
+    
     return res.json(homeVideos);
+    }catch(error){
+        res.json(error);
+    }
 }
 
 export async function getOneVideo(req,res){
+    try{
     const oneVideo=await Video_data.findOne({videoID : req.params.id});
     const videoChannel=await User_data.findOne({'channels.channelID' : oneVideo.channelID});
     let matchedChannel;
@@ -16,7 +23,46 @@ export async function getOneVideo(req,res){
             matchedChannel=item;
             oneVideo.subscribers=matchedChannel.subscribers;
             return res.json(oneVideo);
-        }})    
-    
-    
+        }});    
+    }catch(error)
+    {
+        console.log(error.message);
+    }
 }
+
+export async function uploadVideo(req,res)
+{
+    try{
+        console.log("1");
+        const id_data= await Id_data.findOne();
+        const lastVideoID=id_data.lastVideoIDinSystem;
+        const newVideoID="V00"+(parseInt(lastVideoID.slice(3,))+1).toString();
+        const newVideo=new Video_data(req.body);
+        console.log("2");
+        newVideo.videoID=newVideoID;
+        newVideo.likes=0;
+        newVideo.dislikes=0;
+        newVideo.views=0;
+        newVideo.comments=[];
+        newVideo.uploadDate=(new Date()).toDateString();
+        console.log("3");
+        await Id_data.findOneAndUpdate({lastVideoIDinSystem:lastVideoID},{lastVideoIDinSystem:newVideoID});
+        newVideo.save().then(()=>{return res.status(201).json({"message":"Video uploaded successfully"})}).catch((error)=>{return res.status(500).json({"message":error})});
+        
+    }catch(error)
+    {
+        return res.status(500).json({"message":"Server error",error});
+    }
+}
+
+export async function getVideosOfChannel(req,res){
+    console.log("empty");
+    const videosOfChannel=await Video_data.find({channelID:req.params.channelID});
+    
+    if(!videosOfChannel)
+    {
+        return res.status(404).json({"message":"Videos not found"})
+    }
+    return res.status(200).json({"videos":videosOfChannel});
+}
+

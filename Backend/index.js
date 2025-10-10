@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { Video_data } from "./Model/videos.model.js";
 import { videosRoutes } from "./Routes/videos.routes.js";
 import cors from "cors";
+import {usersRoutes} from "./Routes/users.routes.js"
 
 const app=new express();
 app.use(cors());
@@ -18,6 +19,7 @@ db.on("error",()=>{
 })
 
 videosRoutes(app);
+usersRoutes(app);
 
 app.listen(5100,()=>{
     console.log("server is listening on port 5100")
