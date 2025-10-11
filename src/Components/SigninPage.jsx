@@ -39,11 +39,13 @@ function SigninPage({setSignedIn,user,setUser}) {
         else{
             setSignedIn(true);
             setUser(decoded);
+            localStorage.setItem("accesstoken",decoded.accesstoken);
             navigate("/");
         }   
     }
     useEffect(()=>{
         localStorage.setItem("userInfo",JSON.stringify(user));
+        
     },[user]);
 
   return (

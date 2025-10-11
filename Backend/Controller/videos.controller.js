@@ -56,7 +56,7 @@ export async function uploadVideo(req,res)
 }
 
 export async function getVideosOfChannel(req,res){
-    console.log("empty");
+    try{
     const videosOfChannel=await Video_data.find({channelID:req.params.channelID});
     
     if(!videosOfChannel)
@@ -64,5 +64,7 @@ export async function getVideosOfChannel(req,res){
         return res.status(404).json({"message":"Videos not found"})
     }
     return res.status(200).json({"videos":videosOfChannel});
+}
+catch(error){return res.status(500).json({"message":"Server error",error});}
 }
 

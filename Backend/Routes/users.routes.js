@@ -1,4 +1,4 @@
-import { checkAndGetEmail, createChannel, getChannelFromChannelID, loginUser, signupNewUser } from "../Controller/users.controller.js";
+import { checkAndGetEmail, createChannel, getChannelFromChannelID, getUserByID, loginUser, signupNewUser } from "../Controller/users.controller.js";
 import { authorizeUser } from "../Middlewear.js";
 
 export function usersRoutes(app){
@@ -8,4 +8,5 @@ export function usersRoutes(app){
     // app.get("/getUserData",authorizeUser,getUserData);
     app.post("/createChannel",authorizeUser,createChannel);
     app.get("/getChannelFromChannelID/:channelID",authorizeUser,getChannelFromChannelID);
+    app.get("/getUserByID/:userID",authorizeUser,getUserByID);
 }

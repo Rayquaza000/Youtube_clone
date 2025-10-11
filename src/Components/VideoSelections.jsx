@@ -14,7 +14,7 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
     if(alignment=="col")
     {
         return (
-            <div className='flex flex-col w-[90%] xs:w-[50%] h-fit sm:w-[50%] md:w-[350px] md:h-fit' onClick={()=>openVideo()}>
+            <div className='flex flex-col w-[90%] xs:w-[50%] h-fit sm:w-[50%] md:w-[350px] md:h-fit px-2' onClick={()=>openVideo()}>
                 <img src={thumbnailURL} className='w-[100%] h-[70%] rounded-[10px]'></img>
                 <div className='flex flex-row my-2'>
                     {currentPath.slice(0,20)=="/currentplayingvideo"?null:<img src={channelProfilePicture} className='w-[40px] h-[40px] rounded-[50%] mr-3'></img>}

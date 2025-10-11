@@ -85,13 +85,17 @@ export async function createChannel(req,res){
     try{
     const user=await User_data.findOne({userID:req.body.userID});
     const id_data=await Id_data.findOne();
-    const lastChannelID=id_data.LastChannelIDinSystem;
+    const lastChannelID=id_data.lastChannelIDinSystem;
     const newChannelID="CH00"+(parseInt(lastChannelID.slice(4,))+1).toString();
-    const newChannel=req.body;
+    const newChannel={};
+    newChannel.channelName=req.body.channelName;
+    newChannel.channelDescription=req.body.channelDescription;
+    newChannel.channelProfilePicture=req.body.channelProfilePicture;
     newChannel.channelID=newChannelID;
     newChannel.subscribers=0;
     newChannel.channelCreationDate=(new Date()).toDateString();
     user.channels.push(newChannel);
+    await Id_data.findOneAndUpdate({lastChannelIDinSystem:lastChannelID},{lastChannelIDinSystem:newChannelID});
     await user.save();
     return res.status(200).json({"message":"New channel created"});
     }catch(err)
@@ -125,4 +129,20 @@ export async function getChannelFromChannelID(req,res){
     }
     return res.status(404).json({ message: "Channel not found" });
 }catch(error){return res.status(500).json({"message":error})}
+}
+
+export async function getUserByID(req,res)
+{
+    try{
+        const user=await User_data.findOne({userID:req.params.userID});
+        console.log(user);
+        if(!user){
+        return res.status(404).json({"message":"User not found"});
+        }
+        return res.status(200).json(JSON.stringify(user));
+    }
+    catch(error)
+    {
+        return res.status(500).json({"message":error})
+    }
 }
