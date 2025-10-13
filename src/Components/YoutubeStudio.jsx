@@ -3,8 +3,18 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import youtube_icon from "../assets/Youtube_icon.png";
 import VideoSelections from "./VideoSelections";
+import { SlHome } from "react-icons/sl";
+import { useNavigate } from "react-router-dom";
+import { FaGoogle } from "react-icons/fa6";
+import { MdOutlineSwitchAccount } from "react-icons/md";
+import { GoSignOut } from "react-icons/go";
+import { SiYoutubestudio } from "react-icons/si";
+import { CiDollar } from "react-icons/ci";
+import { RiShieldUserLine } from "react-icons/ri";
+import { LuSettings } from "react-icons/lu";
+import { IoIosHelpCircleOutline } from "react-icons/io";
 
-function YoutubeStudio({ user, setUser }) {
+function YoutubeStudio({ user, setUser,signedIn, setSignedIn }) {
   const token = localStorage.getItem("accesstoken");
   const [hamburger, setHamburger] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
@@ -19,60 +29,74 @@ function YoutubeStudio({ user, setUser }) {
   const [newChannelDesc, setNewChannelDesc] = useState("");
   const [newChannelPfp, setNewChannelPfp] = useState("");
   const [channelCreationMsg, setChannelCreationMsg] = useState("");
+  const [showProfile,setShowProfile]=useState(false);
+  const [category,setCategory]=useState("");
+  const navigate=useNavigate();
   const todaysDate = new Date();
 
   /** -------------------- INITIALIZATION -------------------- **/
-  useEffect(() => {
-    const userFromLocal = JSON.parse(localStorage.getItem("userInfo"));
-    const currentChannelID = localStorage.getItem("currentChannel");
+ useEffect(() => {
+    // Try getting user from props first
+    if (user && user.channels?.length) {
+      const savedChannel = localStorage.getItem("currentChannel");
+      let selectedChannelID = savedChannel;
 
-    // If user not in prop but exists locally
-    if (!user && userFromLocal) {
-      setUser(userFromLocal);
-    }
-
-    // Only run when user data is available
-    if (userFromLocal?.channels?.length) {
-      let selectedChannelID = currentChannelID;
-
-      if (!selectedChannelID) {
-        selectedChannelID = userFromLocal.channels[0].channelID;
+      // If no saved channel or saved one doesn’t belong to this user
+      const userChannelIDs = user.channels.map(ch => ch.channelID);
+      if (!selectedChannelID || !userChannelIDs.includes(selectedChannelID)) {
+        selectedChannelID = user.channels[0].channelID;
         localStorage.setItem("currentChannel", selectedChannelID);
       }
 
       setDropdownValue(selectedChannelID);
+      localStorage.setItem("userInfo", JSON.stringify(user)); // keep synced
+      return;
     }
-  }, [user, setUser]);
+
+    // If user prop not yet available, try restoring from localStorage
+    const localUser = JSON.parse(localStorage.getItem("userInfo"));
+    if (localUser?.channels?.length) {
+      setUser(localUser);
+      const savedChannel = localStorage.getItem("currentChannel") || localUser.channels[0].channelID;
+      localStorage.setItem("currentChannel", savedChannel);
+      setDropdownValue(savedChannel);
+    }
+  }, [user]);
 
   /** -------------------- FETCH VIDEOS WHEN USER + CHANNEL READY -------------------- **/
-  useEffect(() => {
-    async function getVideosForChannel() {
-      if (!dropdownValue || !token) return;
+  // 🧠 One clear responsibility: fetch videos for the current channel
+useEffect(() => {
+  if (!dropdownValue || !token) return;
 
-      try {
-        const response = await fetch(
-          `http://localhost:5100/getVideosOfChannel/${dropdownValue}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  async function fetchChannelVideos() {
+    try {
+      console.log(dropdownValue);
+      const response = await fetch(
+        `http://localhost:5100/getVideosOfChannel/${dropdownValue}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-        setChannelVideos(data.videos || []);
-      } catch (err) {
-        console.error("Error fetching videos:", err);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    }
 
-    if (dropdownValue && user) getVideosForChannel();
-  }, [dropdownValue, user, token]);
+      const data = await response.json();
+      setChannelVideos(data.videos || []);
+    } catch (err) {
+      console.error("Error fetching videos:", err);
+    }
+  }
+
+  // Call it
+  fetchChannelVideos();
+}, [dropdownValue, token]);
+
 
   /** -------------------- HANDLE WINDOW RESIZE -------------------- **/
   useEffect(() => {
@@ -116,6 +140,7 @@ function YoutubeStudio({ user, setUser }) {
           title,
           thumbnailURL,
           description,
+          category,
           channelID: dropdownValue,
           channelName: channelData.channelName,
           channelProfilePicture: channelData.userProfilePicture,
@@ -165,7 +190,7 @@ function YoutubeStudio({ user, setUser }) {
 
       const json_response = await response.json();
       console.log(json_response);
-      setChannelCreationMsg("New channel created");
+      setChannelCreationMsg("New channel created. Your current channel is now set to the new channel.");
 
       setTimeout(() => {
         setNewChannelForm(false);
@@ -184,9 +209,9 @@ function YoutubeStudio({ user, setUser }) {
         }
       );
 
-      if (!response3.ok)
+      if (!response3.ok){
         throw new Error(`HTTP error! status: ${response3.status}`);
-
+      }
       const updatedUser = await response3.json();
       setUser(updatedUser);
       localStorage.setItem("userInfo", JSON.stringify(updatedUser));
@@ -200,6 +225,13 @@ function YoutubeStudio({ user, setUser }) {
     } catch (err) {
       console.error("Create channel error:", err);
     }
+  }
+
+  function signOutFromAccount(){
+    setUser(null);
+    setSignedIn(false);
+    localStorage.clear();
+    navigate("/");
   }
 
   /** -------------------- RENDER -------------------- **/
@@ -236,7 +268,7 @@ function YoutubeStudio({ user, setUser }) {
             />
             <span
               className={
-                channelCreationMsg === "New channel created"
+                channelCreationMsg === "New channel created. Your current channel is now set to the new channel."
                   ? "text-green-700 font-medium"
                   : "text-red-600 font-medium"
               }
@@ -263,12 +295,36 @@ function YoutubeStudio({ user, setUser }) {
           <img src={youtube_icon} className="w-[35px] h-[20px] ml-[15px]" />
           <span className="font-bold text-[20px]">Studio</span>
         </div>
+        <div  className="flex flex-row items-center justify-end">
         <button
           className="mr-3 px-3 py-2 bg-gray-300 font-medium rounded-[20px] hover:bg-gray-400"
           onClick={() => setNewChannelForm(true)}
         >
           New channel
         </button>
+        <img src={user?.userProfilePicture} className='w-[30px] h-[30px] mr-[20px] rounded-[50%]' onClick={()=>{setShowProfile(!showProfile)}}></img>
+        {showProfile && <div className='flex flex-col absolute shadow-sm shadow-black top-[20px] w-[250px] px-3 h-fit right-[60px] bg-white rounded-[8px]'>
+                            <div className='flex flex-row my-3'>
+                                <img src={user.userProfilePicture} className='w-[40px] h-[40px] rounded-[50%] mx-3'/>
+                                <div className='flex flex-col'>
+                                    <span>{user.userName}</span>
+                                    <span className='text-blue-600'>View your channel</span>
+                                    
+                                </div>
+                            </div>
+                            <hr className='text-gray-300'/>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300 '><FaGoogle className='mr-2'/>Google Account</span>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><MdOutlineSwitchAccount className='mr-2'/> Switch account</span>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300' onClick={()=>{signOutFromAccount();}}><GoSignOut className='mr-2' /> Sign out</span>
+                            <hr className='text-gray-300'/>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><SiYoutubestudio className='mr-2'/>YouTube studio</span>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><CiDollar className='mr-2'/> Purchases and memberships</span>
+                            <hr className='text-gray-300'/>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><RiShieldUserLine className='mr-2'/> Your data in YouTube</span>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><LuSettings className='mr-2'/> Settings</span>
+                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><IoIosHelpCircleOutline className='mr-2'/> Help</span>
+                        </div>}
+        </div>
       </div>
 
       {/* Main Content */}
@@ -296,6 +352,7 @@ function YoutubeStudio({ user, setUser }) {
                   </option>
                 ))}
               </select>
+                <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 mt-5 hover:bg-gray-100' onClick={()=>{navigate("/")}}><SlHome className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Youtube Home</span></button>
             </div>
           )}
 
@@ -334,6 +391,14 @@ function YoutubeStudio({ user, setUser }) {
                 placeholder="Description"
                 onChange={(e) => setDescription(e.target.value)}
                 value={description}
+              />
+              <span className="mt-5">Video Category:</span>
+              <input
+                type="text"
+                className="w-full px-2 h-[50px] border border-gray-500 rounded-[10px]"
+                placeholder="Video Category"
+                onChange={(e) => setCategory(e.target.value)}
+                value={category}
               />
               <button
                 className="bg-black text-white px-3 py-2 rounded-[15px] mt-5"

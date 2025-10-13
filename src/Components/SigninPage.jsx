@@ -40,13 +40,10 @@ function SigninPage({setSignedIn,user,setUser}) {
             setSignedIn(true);
             setUser(decoded);
             localStorage.setItem("accesstoken",decoded.accesstoken);
+            localStorage.setItem("userInfo",JSON.stringify(user));
             navigate("/");
         }   
     }
-    useEffect(()=>{
-        localStorage.setItem("userInfo",JSON.stringify(user));
-        
-    },[user]);
 
   return (
     <div className='w-[100%] h-screen flex flex-row justify-center items-center'>

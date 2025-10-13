@@ -14,11 +14,11 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
     if(alignment=="col")
     {
         return (
-            <div className='flex flex-col w-[90%] xs:w-[50%] h-fit sm:w-[50%] md:w-[350px] md:h-fit px-2' onClick={()=>openVideo()}>
+            <div className='flex flex-col w-[90%] xs:w-[50%] h-fit sm:w-[50%] md:w-[350px] md:h-fit px-2 mr-auto hover:bg-gray-300 rounded-[10px] pt-2' onClick={()=>openVideo()}>
                 <img src={thumbnailURL} className='w-[100%] h-[70%] rounded-[10px]'></img>
                 <div className='flex flex-row my-2'>
                     {currentPath.slice(0,20)=="/currentplayingvideo"?null:<img src={channelProfilePicture} className='w-[40px] h-[40px] rounded-[50%] mr-3'></img>}
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col w-[70%]'>
                         <span className='line-clamp-2 font-bold'>{ title}</span>
                         <span className='text-gray-500'>{channelName}</span>
                         <div className='flex flex-row'>
@@ -26,7 +26,7 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
                             <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}> &nbsp;{daysAgo} days ago</span>
                         </div>
                     </div>
-                    <PiDotsThreeVerticalBold className='w-15 h-15 self-start'/>
+                    <PiDotsThreeVerticalBold className='w-[20px] h-[20px] self-start ml-auto'/>
                 </div>
                 <div>
 
@@ -37,7 +37,7 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
     else if(alignment=="row")
     {
         return (
-            <div className={currentPath.slice(0,20)=="/currentplayingvideo"?'flex flex-row w-[90%] h-fit md:h-fit px-4':'flex flex-row w-[90%] h-fit md:h-fit'} onClick={()=>openVideo()}>
+            <div className={currentPath.slice(0,20)=="/currentplayingvideo"?'flex flex-row w-[90%] h-fit md:h-fit px-4 mb-1 hover:bg-gray-300 py-2 rounded-[10px]':'flex flex-row w-[90%] h-fit md:h-fit mb-1 hover:bg-gray-300 py-2 rounded-[10px]'} onClick={()=>openVideo()}>
                 {currentPath.slice(0,20)=="/currentplayingvideo"?<img src={thumbnailURL} className='w-[60%] h-[40%] rounded-[10px]'></img>:<img src={thumbnailURL} className='w-[100%] h-[70%] rounded-[10px]'></img>}
                 <div className='flex flex-row mx-2 w-fit h-fit'>
                     {currentPath.slice(0,20)=="/currentplayingvideo"?null:<img src={channelProfilePicture} className='w-[40px] h-[40px] rounded-[50%] mr-3'></img>}
@@ -49,7 +49,7 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
                             <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}> &nbsp;{daysAgo} days ago</span>
                         </div>
                     </div>
-                    <PiDotsThreeVerticalBold className='w-20 h-20 self-start'/>
+                    <PiDotsThreeVerticalBold className='w-[20px] h-[20px] min-w-[20px] self-start ml-auto' onClick={(e)=>{e.stopPropagation()}}/>
                 </div>
                 <div>
 

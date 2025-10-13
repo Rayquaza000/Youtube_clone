@@ -18,10 +18,17 @@ import { IoIosHelpCircleOutline } from 'react-icons/io';
 
 
 
-const Header = ({setHamburger, hamburger,signedIn,setSignedIn,user}) => {
+const Header = ({setHamburger, hamburger,signedIn,setSignedIn,user,setUser}) => {
     const navigate=useNavigate();
     const [showProfile,setShowProfile]=useState(false);
+    function signOutFromAccount(){
+        setShowProfile(false);
+    setUser(null);
+    setSignedIn(false);
+    localStorage.clear();
     
+    window.location.reload();
+  }
   return (
     <div className='flex flex-row w-full h-[80px] items-center justify-between'>
         <div className='flex flex-row w-1/2 h-full items-center sm:w-1/3'>
@@ -55,16 +62,16 @@ const Header = ({setHamburger, hamburger,signedIn,setSignedIn,user}) => {
                         </div>
                     </div>
                     <hr className='text-gray-300'/>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300 '><FaGoogle className='mr-2'/>Google Account</span>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300'><MdOutlineSwitchAccount className='mr-2'/> Switch account</span>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300'><GoSignOut className='mr-2'/> Sign out</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300 '><FaGoogle className='mr-2'/>Google Account</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><MdOutlineSwitchAccount className='mr-2'/> Switch account</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300' onClick={()=>{signOutFromAccount();}}><GoSignOut className='mr-2'/> Sign out</span>
                     <hr className='text-gray-300'/>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300'><SiYoutubestudio className='mr-2'/>YouTube studio</span>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300'><CiDollar className='mr-2'/> Purchases and memberships</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><SiYoutubestudio className='mr-2'/>YouTube studio</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><CiDollar className='mr-2'/> Purchases and memberships</span>
                     <hr className='text-gray-300'/>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300'><RiShieldUserLine className='mr-2'/> Your data in YouTube</span>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300'><LuSettings className='mr-2'/> Settings</span>
-                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-2 hover:bg-gray-300'><IoIosHelpCircleOutline className='mr-2'/> Help</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><RiShieldUserLine className='mr-2'/> Your data in YouTube</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><LuSettings className='mr-2'/> Settings</span>
+                    <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><IoIosHelpCircleOutline className='mr-2'/> Help</span>
                 </div>}
         </div>
     </div>

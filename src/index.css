@@ -2,3 +2,12 @@
 @theme {
   --breakpoint-xs: 572px;
 }
+/* Hide scrollbar (Chrome, Safari) */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar (Firefox) */
+.scrollbar-none {
+  scrollbar-width: none;
+}

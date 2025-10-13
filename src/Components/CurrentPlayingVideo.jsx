@@ -112,7 +112,7 @@ function CurrentPlayingVideo() {
         </div>
         
     </div>
-    <div className='flex flex-col [grid-area:relatedvideo] justify-between h-fit sm:px-3 md:px-3 my-4'>
+    <div className='flex flex-col [grid-area:relatedvideo] justify-between h-fit sm:px-3 md:px-3'>
         {videosData && videosData.map((data,index)=>{
             return <VideoSelections alignment={decideRowOrColumn} key={index} videoID={data.videoID} title={data.title} thumbnailURL={data.thumbnailURL} channelName={data.channelName} channelProfilePicture={data.channelProfilePicture} views={data.views} daysAgo={parseInt((todaysDate.getTime()- videoUploadDateInMilli)/(24*60*60*1000))}/>
         })}
