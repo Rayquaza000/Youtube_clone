@@ -5,7 +5,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { FaGoogle, FaMicrophone } from "react-icons/fa6";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MdOutlineSwitchAccount } from 'react-icons/md';
 import { GoSignOut } from 'react-icons/go';
 import { SiYoutubestudio } from 'react-icons/si';
@@ -21,13 +21,20 @@ import { IoIosHelpCircleOutline } from 'react-icons/io';
 const Header = ({setHamburger, hamburger,signedIn,setSignedIn,user,setUser}) => {
     const navigate=useNavigate();
     const [showProfile,setShowProfile]=useState(false);
+    const [searchText,setSearchText]=useState("");
     function signOutFromAccount(){
         setShowProfile(false);
     setUser(null);
     setSignedIn(false);
     localStorage.clear();
-    
     window.location.reload();
+  }
+  function searchBySearchBar()
+  {
+    if (!searchText.trim()) {
+    return;
+  }
+    navigate(`/search/${searchText}`);
   }
   return (
     <div className='flex flex-row w-full h-[80px] items-center justify-between'>
@@ -37,8 +44,8 @@ const Header = ({setHamburger, hamburger,signedIn,setSignedIn,user,setUser}) => 
             <span className='font-bold text-[20px]' onClick={()=>{navigate("/")}} >YouTube<sup className='font-normal text-[14px]'>IN</sup></span>
         </div>
         <div className='flex flex-row w-0 h-full items-center sm:w-1/3 sm:py-[10px] sm:px-[10px] overflow-hidden md:w-5/12'>
-            <input className='w-2/3 h-[40px] bg-white border-solid border-gray-400 border-[1px] rounded-l-2xl' type="text" placeholder=" Search"></input>
-            <button className='w-[50px] h-[40px] bg-neutral-300 border-gray-400 border-[1px] rounded-r-2xl flex justify-center items-center'><IoSearchOutline/></button>
+            <input className='w-2/3 h-[40px] bg-white border-solid border-gray-400 border-[1px] rounded-l-2xl pl-3' type="text" placeholder="Search" value={searchText} onChange={(e)=>{setSearchText(e.target.value);}}></input>
+            <button className='w-[50px] h-[40px] bg-neutral-300 border-gray-400 border-[1px] rounded-r-2xl flex justify-center items-center' onClick={()=>{searchBySearchBar();}}><IoSearchOutline/></button>
             <FaMicrophone className='w-[20px] h-[20px] m-[10px]'/>
         </div>
         <div className='flex flex-row w-1/2 h-full items-center justify-end sm:w-1/3 md:w-1/4'>

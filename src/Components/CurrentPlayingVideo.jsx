@@ -21,8 +21,8 @@ function CurrentPlayingVideo() {
     const oneVideo=useFetchOneVideo(params.id);
     const [decideRowOrColumn,setDecideRowOrColumn]=useState('col');
     const [hideDownloadAndClip,setHideDownloadAndClip]=useState(0);
-
-
+    const [showCommentButtons,setShowCommentButtons]=useState(false);
+    const [commentText,setCommentText]=useState("");
     useEffect(()=>{
         const updateLayout = () => {
         if(window.innerWidth>1023)
@@ -124,7 +124,12 @@ function CurrentPlayingVideo() {
         </div>
         <div className='flex flex-row mt-4 items-start'>
             <CgProfile className='w-[40px] h-[40px]'/>
-            <input type="text" placeholder=' Add a comment...' className=' w-[100%] border-b-1 border-gray-300 mx-4'></input>
+            <div className='flex flex-col w-[100%]'>
+                <input type="text" placeholder=' Add a comment...' className=' w-[100%] border-b-1 border-gray-300 mx-4 outline-none focus:border-black' onFocus={()=>{setShowCommentButtons(true);}} onChange={(e)=>{setCommentText(e.target.value)}} value={commentText}></input>
+                <div className='flex flex-row justify-end font-medium'>
+                {showCommentButtons?<><button className='px-3 py-1 rounded-[15px]' onClick={()=>{setShowCommentButtons(false)}}>cancel </button><button disabled={commentText==""?true:false}>Comment</button></>:null}
+                </div>
+            </div>
         </div>
         {
         oneVideo.comments.map((data,index)=>{

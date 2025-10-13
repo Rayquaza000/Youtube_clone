@@ -12,6 +12,7 @@ import SignupPage from "./Components/SignupPage.jsx";
 import YoutubeStudio from "./Components/YoutubeStudio.jsx";
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import { Navigate } from "react-router-dom";
+import SearchWindow from "./Components/SearchWindow.jsx";
 
 function App() {
   const [hamburger, setHamburger] = useState(false);
@@ -49,6 +50,10 @@ function App() {
           path: "/currentplayingvideo/:id",
           element: <CurrentPlayingVideo />,
         },
+        {
+          path:"/search/:searchtext",
+          element:<SearchWindow/>
+        }
       ],
     },
     {
