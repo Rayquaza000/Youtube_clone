@@ -38,9 +38,11 @@ function SigninPage({setSignedIn,user,setUser}) {
         }
         else{
             setSignedIn(true);
+            console.log(decoded.userPfp);
             setUser(decoded);
             localStorage.setItem("accesstoken",decoded.accesstoken);
-            localStorage.setItem("userInfo",JSON.stringify(user));
+            console.log(decoded);
+            localStorage.setItem("userInfo",JSON.stringify(decoded));
             navigate("/");
         }   
     }

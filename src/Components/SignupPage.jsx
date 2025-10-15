@@ -18,11 +18,12 @@ function SignupPage() {
         const response=await fetch("http://localhost:5100/signup",requestOptions);
         const decoded=await response.json();
         if(decoded.status!==201){
-            console.log(decoded.err);
+            
             console.log(decoded.message)
+            throw new Error(decoded.err)
         }
         setSignupSuccessful(true);
-    }catch(error){console.log("error");}
+    }catch(error){console.log(error);}
     }
 
     useEffect(()=>{

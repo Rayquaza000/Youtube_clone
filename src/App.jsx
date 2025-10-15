@@ -21,9 +21,9 @@ function App() {
 
   // ✅ Restore user session from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem("userInfo");
+    const storedUser = JSON.parse(localStorage.getItem("userInfo"));
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setUser(storedUser);
       setSignedIn(true);
     }
   }, []);
@@ -48,7 +48,7 @@ function App() {
         },
         {
           path: "/currentplayingvideo/:id",
-          element: <CurrentPlayingVideo />,
+          element: <CurrentPlayingVideo signedIn={signedIn} setSignedIn={setSignedIn} user={user} setUser={setUser}/>,
         },
         {
           path:"/search/:searchtext",

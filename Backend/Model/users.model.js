@@ -36,7 +36,7 @@ const userSchema=mongoose.Schema({
         type:String,
         required:true
     },
-    userProfilePicture:{
+    userPfp:{
         type:String,
         required:true
     },

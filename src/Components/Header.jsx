@@ -57,11 +57,11 @@ const Header = ({setHamburger, hamburger,signedIn,setSignedIn,user,setUser}) => 
                 <CgProfile className='w-[19px] h-[19px] m-[3px] ml-[5px] text-blue-600'/>
                 <span className='mr-[10px] text-blue-600'>Sign in</span>
             </div>}
-            {signedIn && <img src={user.userProfilePicture} className='w-[30px] h-[30px] mr-[20px] rounded-[50%]' onClick={()=>{setShowProfile(!showProfile)}}/>}
+            {signedIn && <img src={user.userPfp} className='w-[30px] h-[30px] mr-[20px] rounded-[50%]' onClick={()=>{setShowProfile(!showProfile)}}/>}
             
             {showProfile && <div className='flex flex-col absolute shadow-sm shadow-black top-[20px] w-[250px] px-3 h-fit right-[60px] bg-white rounded-[8px]'>
                     <div className='flex flex-row my-3'>
-                        <img src={user.userProfilePicture} className='w-[40px] h-[40px] rounded-[50%] mx-3'/>
+                        <img src={user.userPfp} className='w-[40px] h-[40px] rounded-[50%] mx-3'/>
                         <div className='flex flex-col'>
                             <span>{user.userName}</span>
                             <span className='text-blue-600'>View your channel</span>

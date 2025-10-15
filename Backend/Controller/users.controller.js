@@ -43,7 +43,7 @@ export async function checkAndGetEmail(req,res){
     {
         return res.status(404).json({"message":"email not found"})
     }
-    return res.status(200).json({"email":user.email,"userName":user.userName,"userPfp":user.userProfilePicture});
+    return res.status(200).json({"email":user.email,"userName":user.userName,"userPfp":user.userPfp});
 
 }
 
@@ -53,7 +53,7 @@ export async function loginUser(req,res){
         let {email,password}=req.body;
         console.log(email);
     let data=await User_data.findOne({email:email});
-    console.log(data);
+    console.log(data.userPfp);
     if(!data)
     {
         return res.status(404).json({"message":"User does not exist"});
@@ -64,8 +64,8 @@ export async function loginUser(req,res){
         {
             return res.status(403).json({"message":"Invalid password"});
         }
-        const token=jsonwebtoken.sign(email,"logintoyoutube");
-        res.status(200).json({userID : data.userID,email:data.email,userName:data.userName,userProfilePicture:data.userProfilePicture,channels:data.channels,accesstoken:token});
+        const token=jsonwebtoken.sign({ email: data.email, userID: data.userID },"logintoyoutube");
+        return res.status(200).json({userID : data.userID,email:data.email,userName:data.userName,userPfp:data.userPfp,channels:data.channels,accesstoken:token});
     }
     }catch(err)
     {

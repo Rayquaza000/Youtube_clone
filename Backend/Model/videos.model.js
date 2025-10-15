@@ -13,6 +13,9 @@ const commentSchema=mongoose.Schema({
         type:String,
         required:true
     },
+    userProfilePicture:{
+        type:String,
+    },
     text:{
         type:String,
         required:true,

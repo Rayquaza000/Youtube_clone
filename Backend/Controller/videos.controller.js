@@ -68,3 +68,41 @@ export async function getVideosOfChannel(req,res){
 catch(error){return res.status(500).json({"message":"Server error",error});}
 }
 
+
+
+export async function postComment(req,res)
+{
+    try{
+        const currentVideo= await Video_data.findOne({videoID:req.body.videoID});
+        console.log(currentVideo);
+        if(!currentVideo){
+            return res.status(500).json({"message":"Comment not uploaded. Internal server error"})
+        }
+        console.log("executed 1");
+        const id_data= await Id_data.findOne();
+        console.log("executed 1.1");
+        const lastCommentID=id_data.lastCommentIDinSystem;
+        console.log("executed 1.2");
+        const newCommentID="COM00"+(parseInt(lastCommentID.slice(5,))+1).toString();
+        console.log("executed 1.3");
+        const timeStamp=Date.now();
+        console.log(timeStamp);
+        const commentObject= {}
+        console.log("executed 2");
+        commentObject.userID=req.body.userID;
+        commentObject.commentID=newCommentID;
+        commentObject.userName=req.body.userName;
+        commentObject.text=req.body.text; 
+        commentObject.userPfp=req.body.userPfp;
+        commentObject.timestamp=timeStamp;
+        currentVideo.comments.push(commentObject);
+        console.log("executed 3");
+        await Id_data.findOneAndUpdate({lastCommentIDinSystem:lastCommentID},{lastCommentIDinSystem:newCommentID});
+        currentVideo.save().then(()=>{return res.status(200).json({"userData":commentObject})}).catch((error)=>{res.status(404).json({"error":error})});
+        console.log("executed 4");
+        }
+    catch(error){
+        return res.status(500).json({"message":"Server error",error});
+    }
+}
+

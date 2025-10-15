@@ -13,7 +13,7 @@ import { CgProfile } from "react-icons/cg";
 
 
 
-function CurrentPlayingVideo() {
+function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
     const params=useParams();
     const [moreOpened,setMoreOpened]=useState(false);
     const [videosData,setVideosData]=useState(null);
@@ -23,6 +23,16 @@ function CurrentPlayingVideo() {
     const [hideDownloadAndClip,setHideDownloadAndClip]=useState(0);
     const [showCommentButtons,setShowCommentButtons]=useState(false);
     const [commentText,setCommentText]=useState("");
+
+    useEffect(() => {
+  const storedUser = JSON.parse(localStorage.getItem("userInfo"));
+  if (storedUser) {
+    setUser(storedUser);
+    console.log(storedUser);
+    setSignedIn(true);
+  }
+}, []);
+
     useEffect(()=>{
         const updateLayout = () => {
         if(window.innerWidth>1023)
@@ -51,7 +61,35 @@ function CurrentPlayingVideo() {
     return () => window.removeEventListener('resize', updateLayout);
     },[window.innerWidth])
     
-    
+    async function uploadComment(){
+        try{
+            const requestoptions={
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("accesstoken")}` },
+                body: JSON.stringify({userID : user.userID, userName: user.userName,text:commentText, userPfp : user.userPfp ,videoID:params.id}),
+                
+            }
+            console.log("requestoptions:                "+JSON.stringify({userID : user.userID, userName: user.userName,text:commentText,userPfp:user.userPfp,videoID:params.id}));
+            console.log("User object:", user);
+            console.log("SignedIn:", signedIn);
+            console.log("Access token:", localStorage.getItem("accesstoken"));
+            const response =await fetch("http://localhost:5100/uploadcomment",requestoptions);
+            console.log(response);
+            console.log("executed 0")
+            if(!(response.status==200))
+            {
+                throw new Error(response.status);
+            }
+            console.log("executed 1");
+            const json_response=await response.json();
+            console.log("executed 2");
+            oneVideo.comments.push(json_response.userData);
+            console.log("executed 3");
+        }
+        catch(error){
+            console.log("er: "+ error);
+        }
+    }
 
 
     useEffect(()=>{
@@ -76,7 +114,7 @@ function CurrentPlayingVideo() {
     }
     const videoUploadDate=new Date(oneVideo.uploadDate);
     const videoUploadDateInMilli=videoUploadDate.getTime();
-
+    console.log(oneVideo);
 
     return (
         <div className='w-[100%] grid [grid-template-areas:"video"_"relatedvideo"_"comments"] lg:grid-cols-8 lg:[grid-template-areas:"video_video_video_video_video_relatedvideo_relatedvideo_relatedvideo"_"comments_comments_comments_comments_comments_relatedvideo_relatedvideo_relatedvideo"]'>
@@ -123,26 +161,30 @@ function CurrentPlayingVideo() {
             <button className='flex flex-row ml-4 items-center'><MdOutlineSort className='w-[25px] h-[25px]'/> Sort by</button>
         </div>
         <div className='flex flex-row mt-4 items-start'>
-            <CgProfile className='w-[40px] h-[40px]'/>
+            {!signedIn && <CgProfile className='w-[40px] h-[40px]'/>}
+            {signedIn && <img src={user?.userPfp} className='w-[50px] h-[50px] rounded-[50%]'/>}
             <div className='flex flex-col w-[100%]'>
-                <input type="text" placeholder=' Add a comment...' className=' w-[100%] border-b-1 border-gray-300 mx-4 outline-none focus:border-black' onFocus={()=>{setShowCommentButtons(true);}} onChange={(e)=>{setCommentText(e.target.value)}} value={commentText}></input>
-                <div className='flex flex-row justify-end font-medium'>
-                {showCommentButtons?<><button className='px-3 py-1 rounded-[15px]' onClick={()=>{setShowCommentButtons(false)}}>cancel </button><button disabled={commentText==""?true:false}>Comment</button></>:null}
+                <input type="text" placeholder=' Add a comment...' disabled={!signedIn?true:false} className=' w-[100%] border-b-1 border-gray-300 mx-4 outline-none focus:border-black' onFocus={()=>{setShowCommentButtons(true);}} onChange={(e)=>{setCommentText(e.target.value)}} value={commentText}></input>
+                <div className='flex flex-row justify-end font-medium mt-2 mb-3'>
+                {showCommentButtons?<><button className='mx-2 rounded-[15px]' onClick={()=>{setShowCommentButtons(false)}}>cancel </button><button disabled={commentText==""?true:false} className='px-2 py-1 bg-blue-600 rounded-[15px] text-white disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed' onClick={()=>{uploadComment()}}>Comment</button></>:null}
                 </div>
             </div>
         </div>
         {
         oneVideo.comments.map((data,index)=>{
-            const commentDate=new Date(data.timestamp);
-            const commentDateInMilli=videoUploadDate.getTime();
+            // const commentDate=new Date(data.timestamp);
+            // const commentDateInMilli=videoUploadDate.getTime();
+            console.log("data:         "+data);
+                const commentDateInMilli=data.timestamp;
                 return(
                     <div className='flex flex-row my-4 w-[100%]' key={index}>
-                        <CgProfile className='w-[40px] h-[40px]'/>
+                         <img src={data?.userPfp} className='w-[50px] h-[50px] rounded-[50%]'/>
+                        
                         <div className='flex flex-col ml-3'>
                             <div className='flex flex-row items-end'>
                                 <span className='font-bold text-[14px]'> @{data.userName}</span>
                                 &nbsp;
-                                <span className='text-[12px] text-gray-400 font-bold'>{parseInt((todaysDate.getTime()- commentDateInMilli)/(24*60*60*1000))} days ago</span>
+                                <span className='text-[12px] text-gray-400 font-bold'>{parseInt((Date.now() - commentDateInMilli)/(24*60*60*1000))} days ago</span>
                             </div>
                             <span className='line-clamp-3'>{data.text}</span>
                             <div className='flex flex-row mt-2'>
