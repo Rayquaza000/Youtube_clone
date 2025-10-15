@@ -23,6 +23,14 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
     const [hideDownloadAndClip,setHideDownloadAndClip]=useState(0);
     const [showCommentButtons,setShowCommentButtons]=useState(false);
     const [commentText,setCommentText]=useState("");
+    const [showEditAndDelete,setShowEditAndDelete]=useState(-1);
+    const [comments, setComments] = useState([]);
+
+    useEffect(() => {
+    if (oneVideo && oneVideo.comments) {
+        setComments(oneVideo.comments);
+    }
+    }, [oneVideo]);
 
     useEffect(() => {
   const storedUser = JSON.parse(localStorage.getItem("userInfo"));
@@ -68,10 +76,6 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
                 body: JSON.stringify({userID : user.userID, userName: user.userName,text:commentText, userPfp : user.userPfp ,videoID:params.id}),
                 
             }
-            console.log("requestoptions:                "+JSON.stringify({userID : user.userID, userName: user.userName,text:commentText,userPfp:user.userPfp,videoID:params.id}));
-            console.log("User object:", user);
-            console.log("SignedIn:", signedIn);
-            console.log("Access token:", localStorage.getItem("accesstoken"));
             const response =await fetch("http://localhost:5100/uploadcomment",requestoptions);
             console.log(response);
             console.log("executed 0")
@@ -79,11 +83,11 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
             {
                 throw new Error(response.status);
             }
-            console.log("executed 1");
+            
             const json_response=await response.json();
-            console.log("executed 2");
-            oneVideo.comments.push(json_response.userData);
-            console.log("executed 3");
+            
+            setComments((prev) => [...prev, json_response.userData]);
+            setCommentText("");
         }
         catch(error){
             console.log("er: "+ error);
@@ -128,8 +132,7 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
                 throw new Error(response.status);
             }
             const json_response=await response.json();
-            console.log(json_response.message);
-            oneVideo.comments.splice(index,1);
+            setComments((prev) => prev.filter((_, i) => i !== index));
         }catch(error)
         {
             console.log(error);
@@ -177,10 +180,10 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
     </div>
     <div className='w-[100%] flex flex-col [grid-area:comments] sm:pl-3 md:pl-3 sm:pr-7 md:pr-7 lg:pl-20'>
         <div className='flex flex-row'>
-            <span className='font-bold text-[20px]'>{oneVideo.comments.length} comments</span>
+            <span className='font-bold text-[20px]'>{comments.length} comments</span>
             <button className='flex flex-row ml-4 items-center'><MdOutlineSort className='w-[25px] h-[25px]'/> Sort by</button>
         </div>
-        <div className='flex flex-row mt-4 items-start'>
+        <div className='flex flex-row mt-4 items-start mb-6'>
             {!signedIn && <CgProfile className='w-[40px] h-[40px]'/>}
             {signedIn && <img src={user?.userPfp} className='w-[50px] h-[50px] rounded-[50%]'/>}
             <div className='flex flex-col w-[100%]'>
@@ -191,10 +194,11 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
             </div>
         </div>
         {
-        oneVideo.comments.map((data,index)=>{
+        comments.map((data,index)=>{
                 const commentDateInMilli=data.timestamp;
+                
                 return(
-                    <div className='flex flex-row my-4 w-[100%]' key={index}>
+                    <div className='flex flex-row my-2 w-[100%]' key={index}>
                          <img src={data?.userPfp} className='w-[50px] h-[50px] rounded-[50%]'/>
                         
                         <div className='flex flex-col ml-3'>
@@ -210,7 +214,13 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
                                 <span className='text-[14px] font-bold'>Reply</span>
                             </div>    
                         </div>
-                        <PiDotsThreeOutlineVerticalFill className='ml-auto' onClick={()=>{deleteThisComment(data.commentID,index)}}/>
+                        <div className='relative ml-auto'>
+                        <PiDotsThreeOutlineVerticalFill className='ml-auto' onClick={()=>{if(showEditAndDelete==index){setShowEditAndDelete(-1);}else{setShowEditAndDelete(index);}}}/>
+                        {(showEditAndDelete==index) && <div className='absolute flex flex-col w-fit h-fit top-[0px] right-[20px] rounded-[5px] shadow-2xl border-1 border-gray-300' >
+                            <button className='w-full h-fit px-3 py-1 disabled:text-gray-400 hover:bg-gray-300' disabled={data.userID==user.userID?false:true}>Edit</button>
+                            <button className='w-full h-fit px-3 py-1 disabled:text-gray-400 hover:bg-gray-300' disabled={data.userID==user.userID?false:true} onClick={()=>{setShowEditAndDelete(-1);deleteThisComment(data.commentID,index)}}>Delete</button>
+                            </div>}
+                        </div>    
                     </div>
                 )
             })}
