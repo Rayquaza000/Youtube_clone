@@ -13,7 +13,7 @@ const commentSchema=mongoose.Schema({
         type:String,
         required:true
     },
-    userProfilePicture:{
+    userPfp:{
         type:String,
     },
     text:{

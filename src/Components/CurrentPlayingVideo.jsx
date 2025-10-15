@@ -28,7 +28,6 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
   const storedUser = JSON.parse(localStorage.getItem("userInfo"));
   if (storedUser) {
     setUser(storedUser);
-    console.log(storedUser);
     setSignedIn(true);
   }
 }, []);
@@ -115,6 +114,27 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
     const videoUploadDate=new Date(oneVideo.uploadDate);
     const videoUploadDateInMilli=videoUploadDate.getTime();
     console.log(oneVideo);
+    async function deleteThisComment(comID,index){
+        try{
+            console.log(comID);
+            const responseoptions={
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("accesstoken")}` },
+                body: JSON.stringify({videoID : params.id})
+            }
+            const response=await fetch(`http://localhost:5100/deleteThisComment/${comID}`,responseoptions);
+            if(!response.status==200)
+            {
+                throw new Error(response.status);
+            }
+            const json_response=await response.json();
+            console.log(json_response.message);
+            oneVideo.comments.splice(index,1);
+        }catch(error)
+        {
+            console.log(error);
+        }
+    }
 
     return (
         <div className='w-[100%] grid [grid-template-areas:"video"_"relatedvideo"_"comments"] lg:grid-cols-8 lg:[grid-template-areas:"video_video_video_video_video_relatedvideo_relatedvideo_relatedvideo"_"comments_comments_comments_comments_comments_relatedvideo_relatedvideo_relatedvideo"]'>
@@ -172,9 +192,6 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
         </div>
         {
         oneVideo.comments.map((data,index)=>{
-            // const commentDate=new Date(data.timestamp);
-            // const commentDateInMilli=videoUploadDate.getTime();
-            console.log("data:         "+data);
                 const commentDateInMilli=data.timestamp;
                 return(
                     <div className='flex flex-row my-4 w-[100%]' key={index}>
@@ -193,7 +210,7 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
                                 <span className='text-[14px] font-bold'>Reply</span>
                             </div>    
                         </div>
-                        <PiDotsThreeOutlineVerticalFill className='ml-auto'/>
+                        <PiDotsThreeOutlineVerticalFill className='ml-auto' onClick={()=>{deleteThisComment(data.commentID,index)}}/>
                     </div>
                 )
             })}
