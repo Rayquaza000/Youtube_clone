@@ -6,13 +6,17 @@ import VideoSelections from "./VideoSelections";
 import { SlHome } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa6";
-import { MdOutlineSwitchAccount } from "react-icons/md";
+import { MdOutlineAnalytics, MdOutlineSubtitles, MdOutlineSwitchAccount } from "react-icons/md";
 import { GoSignOut } from "react-icons/go";
 import { SiYoutubestudio } from "react-icons/si";
 import { CiDollar } from "react-icons/ci";
 import { RiShieldUserLine } from "react-icons/ri";
-import { LuSettings } from "react-icons/lu";
+import { LuCopyright, LuDollarSign, LuLayoutDashboard, LuSettings } from "react-icons/lu";
 import { IoIosHelpCircleOutline } from "react-icons/io";
+import { FaPhotoVideo } from "react-icons/fa";
+import { TiGroupOutline } from "react-icons/ti";
+import { BiCustomize } from "react-icons/bi";
+import { LiaFileAudio } from "react-icons/lia";
 
 function YoutubeStudio({ user, setUser,signedIn, setSignedIn }) {
   const token = localStorage.getItem("accesstoken");
@@ -302,10 +306,10 @@ useEffect(() => {
         >
           New channel
         </button>
-        <img src={user?.userProfilePicture} className='w-[30px] h-[30px] mr-[20px] rounded-[50%]' onClick={()=>{setShowProfile(!showProfile)}}></img>
+        <img src={user?.userPfp} className='w-[30px] h-[30px] mr-[20px] rounded-[50%]' onClick={()=>{setShowProfile(!showProfile)}}></img>
         {showProfile && <div className='flex flex-col absolute shadow-sm shadow-black top-[20px] w-[250px] px-3 h-fit right-[60px] bg-white rounded-[8px]'>
                             <div className='flex flex-row my-3'>
-                                <img src={user.userProfilePicture} className='w-[40px] h-[40px] rounded-[50%] mx-3'/>
+                                <img src={user.userPfp} className='w-[40px] h-[40px] rounded-[50%] mx-3'/>
                                 <div className='flex flex-col'>
                                     <span>{user.userName}</span>
                                     <span className='text-blue-600'>View your channel</span>
@@ -334,7 +338,7 @@ useEffect(() => {
           {hamburger && (
             <div className="absolute flex flex-col w-[250px] h-full z-3 items-center bg-white border-r border-gray-300 lg:static">
               <img
-                src={user?.userProfilePicture}
+                src={user?.userPfp}
                 className="w-[100px] h-[100px] rounded-full mt-5"
               />
               <span className="font-medium">Your channel</span>
@@ -352,7 +356,16 @@ useEffect(() => {
                   </option>
                 ))}
               </select>
-                <button className='active:bg-gray-100 rounded-[5px] flex flex-row items-center p-1 px-6 mt-5 hover:bg-gray-100' onClick={()=>{navigate("/")}}><SlHome className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Youtube Home</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100' onClick={()=>{navigate("/")}}><SlHome className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Youtube Home</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuLayoutDashboard className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Dashboard</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><FaPhotoVideo className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Content</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><MdOutlineAnalytics className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Analytics</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><TiGroupOutline className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Community</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><MdOutlineSubtitles className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Subtitles</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuCopyright className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Copyright</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuDollarSign className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Earn</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><BiCustomize className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Customization</span></button>
+                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LiaFileAudio className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Audio Library</span></button>
             </div>
           )}
 
@@ -409,7 +422,7 @@ useEffect(() => {
             </div>
 
             {/* Videos */}
-            <div className="flex flex-row flex-wrap justify-between px-2 py-4">
+            <div className="flex flex-row flex-wrap justify-start px-2 py-4">
               {channelVideos?.map((v, i) => {
                 const videoUploadDate = new Date(v.uploadDate);
                 const daysAgo = Math.floor(
