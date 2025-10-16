@@ -7,20 +7,63 @@ function SignupPage() {
     const [passwordValue,setPasswordValue]=useState("");  
     const [pfpValue,setPfpValue]=useState("");  
     const [signupSuccessful,setSignupSuccessful]=useState(false);
+    const [errorInEmail,setErrorInEmail]=useState(null);
+    const [errorInName,setErrorInName]=useState(null);
+    const [errorInPassword,setErrorInPassword]=useState(null);
+    const [accountExists,setAccountExists]=useState("");
     const navigate=useNavigate();
     async function trySigningup(){
+        const pattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!pattern.test(emailValue) || nameValue == "" || emailValue == "" || passwordValue=="")
+        {
+            if(!pattern.test(emailValue)){
+            setErrorInEmail("Invalid email format");
+            setTimeout(()=>{
+                setErrorInEmail(null);
+            },5000);
+            }
+            if(emailValue=="")
+            {
+                setErrorInEmail("Enter your email");
+            setTimeout(()=>{
+                setErrorInEmail(null);
+            },5000);
+            }
+            if(nameValue=="")
+            {
+                setErrorInName("Enter your name");
+            setTimeout(()=>{
+                setErrorInName(null);
+            },5000);
+            }
+            if(passwordValue=="")
+            {
+                setErrorInPassword("Enter new password");
+            setTimeout(()=>{
+                setErrorInPassword(null);
+            },5000);
+            }
+            return;
+        }
         try{
         const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({userName:nameValue,userProfilePicture:pfpValue,email:emailValue,password:passwordValue})
+        body: JSON.stringify({userName:nameValue,userPfp:pfpValue,email:emailValue,password:passwordValue})
         };
         const response=await fetch("http://localhost:5100/signup",requestOptions);
         const decoded=await response.json();
-        if(decoded.status!==201){
+        if(response.status!=200){
             
+            if(decoded.message=="exists")
+            {
+                setAccountExists("Account with this email already exists");
+                setTimeout(()=>{
+                    setAccountExists("");
+                },5000)
+            }
             console.log(decoded.message)
-            throw new Error(decoded.err)
+            throw new Error(decoded.message)
         }
         setSignupSuccessful(true);
     }catch(error){console.log(error);}
@@ -49,12 +92,16 @@ function SignupPage() {
                 <div className='flex flex-col w-full h-full mt-10'>
                     <span>Enter your name</span>
                     <input type='text' className='w-[100%] h-[50px] border-1 border-black border-solid rounded-[5px] px-3' onChange={(event)=>{setNameValue(event.target.value)}} placeholder='Name'></input>
+                    <span className='text-red-600'>{errorInName}</span>
                     <span className='mt-4'>Enter your email</span>
                     <input type='email' className='w-[100%] h-[50px] border-1 border-black border-solid rounded-[5px] px-3' onChange={(event)=>{setEmailValue(event.target.value)}} placeholder='Email'></input>
+                    <span className='text-red-600'>{errorInEmail}</span>
                     <span className='mt-4'>Create password for your account</span>
                     <input type='password' className='w-[100%] h-[50px] border-1 border-black border-solid rounded-[5px] px-3' onChange={(event)=>{setPasswordValue(event.target.value)}} placeholder='Password'></input>
+                    <span className='text-red-600'>{errorInPassword}</span>
                     <span className='mt-4'>Enter link of your profile picture</span>
                     <input type='text' className='w-[100%] h-[50px] border-1 border-black border-solid rounded-[5px] px-3' onChange={(event)=>{setPfpValue(event.target.value)}} placeholder='Profile Picture link'></input>
+                    <span className='text-red-600'>{accountExists}</span>
                 </div>
                 <button className='mt-2 sm:mt-auto self-end bg-blue-600 text-white px-4 py-2 rounded-[20px]' onClick={()=>{trySigningup()}}>Signup</button>
                 </div>

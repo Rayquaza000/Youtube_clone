@@ -33,6 +33,7 @@ function YoutubeStudio({ user, setUser,signedIn, setSignedIn }) {
   const [newChannelDesc, setNewChannelDesc] = useState("");
   const [newChannelPfp, setNewChannelPfp] = useState("");
   const [channelCreationMsg, setChannelCreationMsg] = useState("");
+  const [uploadingVideo,setUploadingVideo]=useState(false);
   const [showProfile,setShowProfile]=useState(false);
   const [category,setCategory]=useState("");
   const navigate=useNavigate();
@@ -116,6 +117,7 @@ useEffect(() => {
   /** -------------------- UPLOAD VIDEO -------------------- **/
   async function uploadVideoToSystem() {
     try {
+      setUploadingVideo(true);
       const response2 = await fetch(
         `http://localhost:5100/getChannelFromChannelID/${dropdownValue}`,
         {
@@ -147,7 +149,7 @@ useEffect(() => {
           category,
           channelID: dropdownValue,
           channelName: channelData.channelName,
-          channelProfilePicture: channelData.userProfilePicture,
+          channelProfilePicture: channelData.channelProfilePicture,
           uploader: channelData.userName,
         }),
       });
@@ -158,9 +160,17 @@ useEffect(() => {
 
       const json_response = await response.json();
       console.log(json_response.message);
-
+      setNewChannelName("");
+      setNewChannelDesc("");
+      setNewChannelPfp("");
+      setTitle("");
+      setVideoURL("");
+      setThumbnailURL("");
+      setDescription("");
+      setCategory("");
       // reload videos after upload
       setTimeout(() => setDropdownValue(dropdownValue), 500);
+      setUploadingVideo(false);
     } catch (err) {
       console.error("Upload error:", err);
     }
@@ -451,6 +461,9 @@ useEffect(() => {
           <div className="absolute w-full h-full bg-[rgba(60,60,60,0.5)] z-2"></div>
         )}
       </div>
+      {uploadingVideo && <div className="z-3 flex flex-row items-center justify-center bg-[rgba(60,60,60,0.5)]">
+        <div className="w-fit h-fit px-10 py-6 bg-white">Uploading Video</div>
+      </div>}
     </div>
   );
 }

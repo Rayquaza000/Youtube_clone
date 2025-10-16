@@ -9,7 +9,8 @@ function SigninPage({setSignedIn,user,setUser}) {
     const [errorDisplay,setErrorDisplay]=useState('');
     const navigate=useNavigate();
     const [emailFound,setEmailFound]=useState(false);
-
+    const [emailFoundStatement,setEmailFoundStatement]=useState(null);
+    const [passwordFoundStatement,setPasswordFoundStatement]=useState(null);
     async function checkEmailExists(){
         const response = await fetch(`http://localhost:5100/checkAndGetEmail/${emailValue}`);
         if(response.status==404)
@@ -18,7 +19,12 @@ function SigninPage({setSignedIn,user,setUser}) {
             setErrorDisplay('Email not found')
         }
         else{
-            setEmailFound(true);
+            setEmailFoundStatement("Email found");
+            setTimeout(()=>{
+                setEmailFoundStatement(null);
+                setEmailFound(true);
+            },3000)
+            
             setUser(await response.json());
         }
         
@@ -33,8 +39,8 @@ function SigninPage({setSignedIn,user,setUser}) {
         const response=await fetch('http://localhost:5100/login',requestOptions);
         const decoded=await response.json();
         if(response.status!=200)
-        {
-            console.log(decoded.message);
+        {   setPasswordFoundStatement("Password doesnt match with this account");
+            setTimeout(()=>{setPasswordFoundStatement(null);},3000);
         }
         else{
             setSignedIn(true);
@@ -63,6 +69,7 @@ function SigninPage({setSignedIn,user,setUser}) {
             <div className='flex flex-col mb-auto'>
             <input type="email" className='w-[100%] h-[50px] border-1 border-black border-solid rounded-[5px] mt-10 px-3' placeholder='Email' onChange={(event)=>{setEmailValue(event.target.value)}} value={emailValue}></input>
             <span className='text-[14px] text-red-600'>{errorDisplay}</span>
+            <span className='text-green-600 font-bold'>{emailFoundStatement}</span>
             <span className='text-[16px] text-blue-600 font-medium'>Forgot email?</span>
             <span className='text-[16px] mt-10'>Not your computer? Use guest mode to sign in privately.</span>
             <span className='text-[16px] text-blue-600 font-medium'>Learn more about using Guest mode.</span>
@@ -76,6 +83,7 @@ function SigninPage({setSignedIn,user,setUser}) {
                         <span className='text-[28px] mt-10'>Hi {user?.userName}</span>
                         <div className='flex flex-row w-fit items-center pr-4 py-1 border-black border-1 rounded-[20px] mt-2'><img src={user?.userPfp} className='w-[25px] h-[25px] mx-2 rounded-[50%]'></img>{user?.email}</div>
                         <input type="password" className='w-[100%] h-[50px] border-1 border-black border-solid rounded-[5px] mt-10 px-3' placeholder='Password' onChange={(event)=>{setPasswordValue(event.target.value)}} value={passwordValue}/>
+                        <span className='text-red-600'>{passwordFoundStatement}</span>
                     </div>
                     <div className='flex flex-row h-fit w-[100%] mt-auto justify-between'>
                         <span className='text-[16px] text-blue-600 font-medium'>Forgot Password?</span>

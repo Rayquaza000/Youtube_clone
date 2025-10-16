@@ -14,7 +14,8 @@ const channelSchema=mongoose.Schema({
         required:true
     },
     channelProfilePicture:{
-        type:String
+        type:String,
+        default:"https://media.istockphoto.com/id/1288129985/vector/missing-image-of-a-person-placeholder.jpg?s=612x612&w=0&k=20&c=9kE777krx5mrFHsxx02v60ideRWvIgI1RWzR1X4MG2Y="
     },
     subscribers:{
         type:Number,
@@ -38,7 +39,7 @@ const userSchema=mongoose.Schema({
     },
     userPfp:{
         type:String,
-        required:true
+        default:"https://media.istockphoto.com/id/1288129985/vector/missing-image-of-a-person-placeholder.jpg?s=612x612&w=0&k=20&c=9kE777krx5mrFHsxx02v60ideRWvIgI1RWzR1X4MG2Y="
     },
     email:{
         type:String,

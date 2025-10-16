@@ -37,6 +37,7 @@ export async function uploadVideo(req,res)
         const id_data= await Id_data.findOne();
         const lastVideoID=id_data.lastVideoIDinSystem;
         const newVideoID="V00"+(parseInt(lastVideoID.slice(3,))+1).toString();
+        console.log(req.body);
         const newVideo=new Video_data(req.body);
         console.log("2");
         newVideo.videoID=newVideoID;

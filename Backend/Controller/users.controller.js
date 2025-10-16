@@ -4,9 +4,20 @@ import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken"
 
 export async function signupNewUser(req,res){
-    
-    const newUserCredentials=req.body;
-
+    try{
+        const checkifemailexists=await User_data.findOne({email:req.body.email})
+        if(checkifemailexists)
+        {
+            return res.status(500).json({"message":"exists"})
+        }
+        const newUserCredentials={};
+        newUserCredentials.userName=req.body.userName;
+        newUserCredentials.email=req.body.email;
+        newUserCredentials.password=req.body.password;
+        if(req.body.userPfp!="")
+        {
+        newUserCredentials.userPfp=req.body.userPfp;
+        }
     const id_data= await Id_data.findOne();
     const userID=id_data.lastUserIDinSystem;
     const newUserIDNumber=(parseInt(userID.slice(6,))+1).toString();
@@ -21,9 +32,12 @@ export async function signupNewUser(req,res){
         channelID : newChannelID,
         channelName : req.body.userName,
         channelDescription: " ",
-        channelProfilePicture:req.body.userProfilePicture,
         subscribers:0,
         channelCreationDate:(new Date()).toDateString()
+    }
+    if(req.body.userPfp!="")
+    {
+        firstChannel.channelProfilePicture=req.body.userPfp
     }
     newUserCredentials.channels=[ firstChannel ];
     await Id_data.findOneAndUpdate(
@@ -32,9 +46,11 @@ export async function signupNewUser(req,res){
       { new: true }
     );
     const newUser=new User_data(newUserCredentials);
-    newUser.save().then(()=>{return res.status(201).json({"message":"New user and channel created"})}).catch((error)=>{return res.json({"message":error})});
-
+    newUser.save().then(()=>{return res.status(200).json({"message":"New user and channel created"})}).catch((error)=>{return res.status(500).json({"message":error})});
+    }catch(error){return res.status(500).json({"message":error})}
 }
+
+
 
 
 export async function checkAndGetEmail(req,res){
@@ -46,6 +62,8 @@ export async function checkAndGetEmail(req,res){
     return res.status(200).json({"email":user.email,"userName":user.userName,"userPfp":user.userPfp});
 
 }
+
+
 
 
 export async function loginUser(req,res){
@@ -73,13 +91,7 @@ export async function loginUser(req,res){
     }
 }
 
-// export async function getUserData(req,res){
-//     try{
-        
-//     }catch(err){
-//         return res.status(500).json({"message": "Internal server error",err})
-//     }
-// }
+
 
 export async function createChannel(req,res){
     try{
@@ -103,6 +115,8 @@ export async function createChannel(req,res){
         res.status(500).json({"message":err});
     }
 }
+
+
 
 export async function getChannelFromChannelID(req,res){
     try{
@@ -130,6 +144,8 @@ export async function getChannelFromChannelID(req,res){
     return res.status(404).json({ message: "Channel not found" });
 }catch(error){return res.status(500).json({"message":error})}
 }
+
+
 
 export async function getUserByID(req,res)
 {
