@@ -8,13 +8,28 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
     const navigate=useNavigate();
     const location=useLocation();
     const currentPath=location.pathname;
-    function openVideo(){
+    async function openVideo(){
+        try{
+            const requestoptions={
+                 method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({videoID:videoID})
+            }
+            const response= await fetch("http://localhost:5100/incrementViewCount",requestoptions);
+            if(!response.status==200)
+            {
+                throw new Error(response.status);
+            }
+            views++;
+        }catch(error){
+            return console.log(error)
+        }
         navigate(`/currentplayingvideo/${videoID}`);
     }
     if(alignment=="col")
     {
         return (
-            <div className='flex flex-col w-[90%] xs:w-[50%] h-fit sm:w-[50%] md:w-[350px] md:h-fit px-2 hover:bg-gray-300 rounded-[10px] pt-2' onClick={()=>openVideo()}>
+            <div className='flex flex-col w-[90%] xs:w-[50%] h-fit sm:w-[50%] md:w-[350px] md:h-fit px-2 hover:bg-gray-300 rounded-[10px] pt-2' onClick={()=>{openVideo()}}>
                 <img src={thumbnailURL} className='w-[100%] h-[70%] rounded-[10px]'></img>
                 <div className='flex flex-row my-2'>
                     {currentPath.slice(0,20)=="/currentplayingvideo"?null:<img src={channelProfilePicture} className='w-[40px] h-[40px] rounded-[50%] mr-3'></img>}

@@ -100,18 +100,24 @@ export async function postComment(req,res)
 export async function deleteThisComment(req,res)
 {
     try{
-        console.log(1)
         const commentVideo=await Video_data.findOne({videoID:req.body.videoID});
-        console.log(commentVideo.comments)
         const indexofcom=await commentVideo.comments.findIndex(com=>com.comID==req.params.comID);
-        console.log(3)
         commentVideo.comments.splice(indexofcom,1);
-        console.log(4)
-        commentVideo.save().then(()=>{return res.status(200).json({"message":"comment successfully deleted"});}).catch((error)=>{return res.status(500).json("error",error)})
-        
-
+        commentVideo.save().then(()=>{return res.status(200).json({"message":"comment successfully deleted"});}).catch((error)=>{return res.status(500).json({"error":error})});
     }catch(error)
     {
         return res.status(500).json({"error":error});
+    }
+}
+
+export async function incrementViewCount(req,res)
+{
+    try{
+        const videodata=await Video_data.findOne({videoID:req.body.videoID});
+        videodata.views=videodata.views+1;
+        videodata.save().then(()=>{return res.status(200).json({"message":"view count incremented"})}).catch((error)=>{return res.status(500).json({"error":error})});
+    }catch(error)
+    {
+        return res.status(500).json({"error":error})
     }
 }

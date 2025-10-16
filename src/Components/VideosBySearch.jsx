@@ -6,7 +6,7 @@ function VideosBySearch({alignment,videoID,title,thumbnailURL,channelName,channe
     const navigate=useNavigate();
   return (
     <div className='w-[100%] flex flex-row hover:bg-gray-300 rounded-[15px] p-5' onClick={()=>{navigate(`/currentplayingvideo/${videoID}`)}}>
-        <img src={thumbnailURL} className='w-[40%] h-[100%] min-w-[250px] min-h-[180px] rounded-[15px]'/>
+        <img src={thumbnailURL} className='w-[30%] h-[100%] min-w-[250px] min-h-[180px] rounded-[15px]'/>
         <div className='flex flex-col ml-4'>
             <span className="text-[20px] font-medium">{title}</span>
             <div className='flex flex-row text-gray-500'>

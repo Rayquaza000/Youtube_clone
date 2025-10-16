@@ -10,6 +10,7 @@ import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import VideoSelections from './VideoSelections';
 import { MdOutlineSort } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
+import { TiTick } from 'react-icons/ti';
 
 
 
@@ -25,7 +26,7 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
     const [commentText,setCommentText]=useState("");
     const [showEditAndDelete,setShowEditAndDelete]=useState(-1);
     const [comments, setComments] = useState([]);
-
+    const [indexOfCommentToEdit,setIndexOfCommentToEdit]=useState(-1);
     useEffect(() => {
     if (oneVideo && oneVideo.comments) {
         setComments(oneVideo.comments);
@@ -73,7 +74,7 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
             const requestoptions={
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("accesstoken")}` },
-                body: JSON.stringify({userID : user.userID, userName: user.userName,text:commentText, userPfp : user.userPfp ,videoID:params.id}),
+                body: JSON.stringify({userID : user.userID, userName: user.userName,text:commentText, userPfp : user.userPfp ,videoID:params.id})
                 
             }
             const response =await fetch("http://localhost:5100/uploadcomment",requestoptions);
@@ -117,7 +118,9 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
     }
     const videoUploadDate=new Date(oneVideo.uploadDate);
     const videoUploadDateInMilli=videoUploadDate.getTime();
-    console.log(oneVideo);
+    
+    
+
     async function deleteThisComment(comID,index){
         try{
             console.log(comID);
@@ -164,7 +167,7 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
         </div>
         <div className='flex flex-col m-3 p-2 bg-gray-300 rounded-[10px] lg:mx-0'>
             <div className='flex flex-row'>
-                <span className='font-bold'>{oneVideo.views>1000? (oneVideo.views > 1000000 ? oneVideo.views/1000000+"M" : (oneVideo.views)/1000+"k"):oneVideo.views} views</span>&nbsp;
+                <span className='font-bold'>{oneVideo.views>1000? (oneVideo.views > 1000000 ? oneVideo.views/1000000+"M" : (oneVideo.views)/1000+"k"):oneVideo.views} views</span>&nbsp; &nbsp;
                 <span className='font-bold'>{parseInt((todaysDate.getTime()- videoUploadDateInMilli)/(24*60*60*1000))} days ago</span>
             </div>
             <div className='h-fit'>
@@ -196,7 +199,10 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
         {
         comments.map((data,index)=>{
                 const commentDateInMilli=data.timestamp;
-                
+                async function editComment(e)
+                {
+                    data.text=e.target.innerText;
+                }
                 return(
                     <div className='flex flex-row my-2 w-[100%]' key={index}>
                          <img src={data?.userPfp} className='w-[50px] h-[50px] rounded-[50%]'/>
@@ -207,7 +213,10 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
                                 &nbsp;
                                 <span className='text-[12px] text-gray-400 font-bold'>{parseInt((Date.now() - commentDateInMilli)/(24*60*60*1000))} days ago</span>
                             </div>
-                            <span className='line-clamp-3'>{data.text}</span>
+                            <div className='flex flex-row items-center'>
+                            <span className='line-clamp-3' contentEditable={indexOfCommentToEdit==index?true:false} onInput={(e)=>{editComment(e)}}>{data.text}</span>
+                            {indexOfCommentToEdit==index && <TiTick className='w-[50px] h-[20px]' onClick={()=>{setIndexOfCommentToEdit(-1); console.log(data.text)}}/>}
+                            </div>
                             <div className='flex flex-row mt-2'>
                                 <BiLike className='w-[20px] h-[20px] mr-3'/>
                                 <BiDislike className='w-[20px] h-[20px] mr-3'/>
@@ -215,9 +224,9 @@ function CurrentPlayingVideo({signedIn,setSignedIn,user,setUser}) {
                             </div>    
                         </div>
                         <div className='relative ml-auto'>
-                        <PiDotsThreeOutlineVerticalFill className='ml-auto' onClick={()=>{if(showEditAndDelete==index){setShowEditAndDelete(-1);}else{setShowEditAndDelete(index);}}}/>
+                        <PiDotsThreeOutlineVerticalFill className='ml-auto' onClick={()=>{if(showEditAndDelete==index){setShowEditAndDelete(-1);}else{if(indexOfCommentToEdit==index){setShowEditAndDelete(-1)}else{setShowEditAndDelete(index);}}}}/>
                         {(showEditAndDelete==index) && <div className='absolute flex flex-col w-fit h-fit top-[0px] right-[20px] rounded-[5px] shadow-2xl border-1 border-gray-300' >
-                            <button className='w-full h-fit px-3 py-1 disabled:text-gray-400 hover:bg-gray-300' disabled={data.userID==user.userID?false:true}>Edit</button>
+                            <button className='w-full h-fit px-3 py-1 disabled:text-gray-400 hover:bg-gray-300' disabled={data.userID==user.userID?false:true} onClick={()=>{setShowEditAndDelete(-1);setIndexOfCommentToEdit(index)}}>Edit</button>
                             <button className='w-full h-fit px-3 py-1 disabled:text-gray-400 hover:bg-gray-300' disabled={data.userID==user.userID?false:true} onClick={()=>{setShowEditAndDelete(-1);deleteThisComment(data.commentID,index)}}>Delete</button>
                             </div>}
                         </div>    

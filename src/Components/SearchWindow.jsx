@@ -23,7 +23,7 @@ function SearchWindow() {
     
     
   return (
-    <div className='flex flex-col pl-5'>
+    <div className='flex flex-col w-full pl-5  pr-5'>
         {
         
         allVideos.map((data,index)=>{
