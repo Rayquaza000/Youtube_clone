@@ -22,8 +22,8 @@ const Home = ({ signedIn, hamburger }) => {
   } else {
     //  Desktop layout
     const baseWidth = hamburger ? "calc(100vw-250px-15px)" : "calc(100vw-33px-15px)";
-    homeWidth = `flex flex-col w-[${baseWidth}] min-h-[calc(100vh-80px)] md:mr-auto pl-3`;
-    filterWidth = `flex flex-row flex-wrap gap-2 w-[${baseWidth}] my-3 px-4 overflow-x-auto scrollbar-none`;
+    homeWidth = `flex flex-col flex-1 w-[${baseWidth}] min-h-[calc(100vh-80px)] md:mr-auto pl-3`;
+    filterWidth = `flex flex-row flex-wrap gap-2 flex-1 w-[${baseWidth}] my-3 px-4 overflow-x-auto scrollbar-none`;
     videosWidth = `flex flex-wrap justify-start w-[${baseWidth}] min-h-[calc(100vh-80px)]`;
   }
 

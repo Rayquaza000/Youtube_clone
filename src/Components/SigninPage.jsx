@@ -23,7 +23,7 @@ function SigninPage({setSignedIn,user,setUser}) {
             setTimeout(()=>{
                 setEmailFoundStatement(null);
                 setEmailFound(true);
-            },3000)
+            },2000)
             
             setUser(await response.json());
         }

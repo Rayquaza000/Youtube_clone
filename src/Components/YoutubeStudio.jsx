@@ -25,6 +25,11 @@ function YoutubeStudio({ user, setUser,signedIn, setSignedIn }) {
   const [dropdownValue, setDropdownValue] = useState("");
   const [channelVideos, setChannelVideos] = useState([]);
   const [title, setTitle] = useState("");
+  const [titleMissing,setTitleMissing]=useState(false);
+  const [videoURLMissing,setVideoURLMissing]=useState(false);
+  const [thumbnailURLMissing,setThumbnailURLMissing]=useState(false);
+  const [descriptionMissing,setDescriptionMissing]=useState(false);
+  const [categoryMissing,setCategoryMissing]=useState(false);
   const [videoURL, setVideoURL] = useState("");
   const [thumbnailURL, setThumbnailURL] = useState("");
   const [description, setDescription] = useState("");
@@ -117,7 +122,7 @@ useEffect(() => {
   /** -------------------- UPLOAD VIDEO -------------------- **/
   async function uploadVideoToSystem() {
     try {
-      setUploadingVideo(true);
+      
       const response2 = await fetch(
         `http://localhost:5100/getChannelFromChannelID/${dropdownValue}`,
         {
@@ -134,7 +139,30 @@ useEffect(() => {
       }
 
       const channelData = await response2.json();
-
+      if(title=="" || title==null){
+        setTitleMissing(true);
+        setTimeout(()=>{setTitleMissing(false);},3000);
+      }
+      if(videoURL=="" || videoURL==null){
+        setVideoURLMissing(true);
+        setTimeout(()=>{setVideoURLMissing(false);},3000);
+      }
+      if(thumbnailURL=="" || thumbnailURL==null){
+        setThumbnailURLMissing(true);
+        setTimeout(()=>{setThumbnailURLMissing(false);},3000);
+      }
+      if(description=="" || description==null){
+        setDescriptionMissing(true);
+        setTimeout(()=>{setDescriptionMissing(false);},3000);
+      }
+      if(category=="" || category==null){
+        setCategoryMissing(true);
+        setTimeout(()=>{setCategoryMissing(false);},3000);
+      }
+      if(title=="" || videoURL=="" || thumbnailURL=="" || description=="" || category=="")
+      {
+        return
+      }
       const response = await fetch("http://localhost:5100/uploadVideo", {
         method: "POST",
         headers: {
@@ -157,7 +185,7 @@ useEffect(() => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+      setUploadingVideo(true);
       const json_response = await response.json();
       console.log(json_response.message);
       setNewChannelName("");
@@ -170,7 +198,7 @@ useEffect(() => {
       setCategory("");
       // reload videos after upload
       setTimeout(() => setDropdownValue(dropdownValue), 500);
-      setUploadingVideo(false);
+      setTimeout(()=>{setUploadingVideo(false);},2000);
     } catch (err) {
       console.error("Upload error:", err);
     }
@@ -391,6 +419,7 @@ useEffect(() => {
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
               />
+              {titleMissing && <span className="text-red-600">Enter title.</span>}
               <span className="mt-5">Video URL:</span>
               <input
                 type="text"
@@ -399,6 +428,7 @@ useEffect(() => {
                 onChange={(e) => setVideoURL(e.target.value)}
                 value={videoURL}
               />
+              {videoURLMissing && <span className="text-red-600">Enter video URL.</span>}
               <span className="mt-5">Thumbnail URL:</span>
               <input
                 type="text"
@@ -407,6 +437,7 @@ useEffect(() => {
                 onChange={(e) => setThumbnailURL(e.target.value)}
                 value={thumbnailURL}
               />
+              {thumbnailURLMissing && <span className="text-red-600">Enter thumbnailURL.</span>}
               <span className="mt-5">Description:</span>
               <input
                 type="text"
@@ -415,6 +446,7 @@ useEffect(() => {
                 onChange={(e) => setDescription(e.target.value)}
                 value={description}
               />
+              {descriptionMissing && <span className="text-red-600">Enter description.</span>}
               <span className="mt-5">Video Category:</span>
               <input
                 type="text"
@@ -423,6 +455,7 @@ useEffect(() => {
                 onChange={(e) => setCategory(e.target.value)}
                 value={category}
               />
+              {categoryMissing && <span className="text-red-600">Enter category.</span>}
               <button
                 className="bg-black text-white px-3 py-2 rounded-[15px] mt-5"
                 onClick={uploadVideoToSystem}
@@ -461,7 +494,7 @@ useEffect(() => {
           <div className="absolute w-full h-full bg-[rgba(60,60,60,0.5)] z-2"></div>
         )}
       </div>
-      {uploadingVideo && <div className="z-3 flex flex-row items-center justify-center bg-[rgba(60,60,60,0.5)]">
+      {uploadingVideo && <div className="absolute top-0 left-0 z-70 w-full h-screen flex flex-row items-center justify-center bg-[rgba(60,60,60,0.5)]">
         <div className="w-fit h-fit px-10 py-6 bg-white">Uploading Video</div>
       </div>}
     </div>
