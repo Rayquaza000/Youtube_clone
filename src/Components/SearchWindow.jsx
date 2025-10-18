@@ -28,7 +28,7 @@ function SearchWindow() {
         
         allVideos.map((data,index)=>{
             
-            if(data?.title?.toLowerCase().includes(params.searchtext.toLowerCase()))
+            if(data?.title?.toLowerCase().replace(/\s/g, "").includes(params.searchtext.toLowerCase().replace(/\s/g, "")))
             {
                 const videoUploadDate = new Date(data.uploadDate);
           const daysAgo = parseInt(

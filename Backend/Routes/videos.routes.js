@@ -1,4 +1,4 @@
-import {deleteThisComment, getHomeVideos,getOneVideo, getVideosOfChannel, incrementViewCount, postComment, uploadVideo } from "../Controller/videos.controller.js";
+import {deleteThisComment, editThisComment, getHomeVideos,getOneVideo, getVideosOfChannel, incrementViewCount, postComment, uploadVideo } from "../Controller/videos.controller.js";
 import { authorizeUser } from "../Middlewear.js";
 export function videosRoutes(app){
     app.get("/homeVideos",getHomeVideos);
@@ -8,4 +8,5 @@ export function videosRoutes(app){
     app.post("/uploadcomment",authorizeUser,postComment);
     app.delete("/deleteThisComment/:comID",authorizeUser,deleteThisComment);
     app.patch("/incrementViewCount",incrementViewCount);
+    app.patch("/editThisComment/:comID",authorizeUser,editThisComment);
 }
