@@ -1,16 +1,16 @@
 import { useEffect, useState,lazy, Suspense } from "react";
 import "./App.css";
 import {createBrowserRouter,RouterProvider} from "react-router-dom";
-//import Home from "./Components/Home.jsx";
-//import CurrentPlayingVideo from "./Components/CurrentPlayingVideo.jsx";
-//import MainLayout from "./LayoutComponents/MainLayout.jsx";
+import Home from "./Components/Home.jsx";
+import CurrentPlayingVideo from "./Components/CurrentPlayingVideo.jsx";
+import MainLayout from "./LayoutComponents/MainLayout.jsx";
 import SigninPage from "./Components/SigninPage.jsx";
 import SignupPage from "./Components/SignupPage.jsx";
 import YoutubeStudio from "./Components/YoutubeStudio.jsx";
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import { Navigate } from "react-router-dom";
 import ErrorPage from "./Components/ErrorPage.jsx";
-//import SearchWindow from "./Components/SearchWindow.jsx";
+import SearchWindow from "./Components/SearchWindow.jsx";
 
 function App() {
   const [hamburger, setHamburger] = useState(false);
@@ -27,11 +27,11 @@ function App() {
   }, []);
 
   //lazy loading
-  const MainLayout=lazy(()=>import("../src/LayoutComponents/MainLayout.jsx"));
-  const Home=lazy(()=>import("./Components/Home.jsx"));
-  const CurrentPlayingVideo=lazy(()=>import("./Components/CurrentPlayingVideo.jsx"));
-  const SearchWindow=lazy(()=>import("./Components/SearchWindow.jsx"));
-  const YoutubeStudio=lazy(()=>import("./Components/YoutubeStudio.jsx"))
+  // const MainLayout=lazy(()=>import("../src/LayoutComponents/MainLayout.jsx"));
+  // const Home=lazy(()=>import("./Components/Home.jsx"));
+  // const CurrentPlayingVideo=lazy(()=>import("./Components/CurrentPlayingVideo.jsx"));
+  // const SearchWindow=lazy(()=>import("./Components/SearchWindow.jsx"));
+  // const YoutubeStudio=lazy(()=>import("./Components/YoutubeStudio.jsx"))
   // Router setup
   const appRouter = createBrowserRouter([
     {
@@ -40,7 +40,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Suspense fallback={<div className="self-center m-auto">Loading</div>}><Home signedIn={signedIn} hamburger={hamburger} /></Suspense>,
+          element: <Home signedIn={signedIn} hamburger={hamburger} />,
         },
         {
           path: "/currentplayingvideo/:id",
@@ -81,7 +81,7 @@ function App() {
     }
   ]);
 
-  return (<Suspense fallback={<div className="self-center m-auto">Loading</div>}><RouterProvider router={appRouter} /></Suspense>);
+  return (<RouterProvider router={appRouter} />);
 }
 
 export default App;
