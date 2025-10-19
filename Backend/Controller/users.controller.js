@@ -54,13 +54,16 @@ export async function signupNewUser(req,res){
 
 
 export async function checkAndGetEmail(req,res){
+    try{
     const user=await User_data.findOne({email:req.params.email});
     if(!user)
     {
         return res.status(404).json({"message":"email not found"})
     }
     return res.status(200).json({"email":user.email,"userName":user.userName,"userPfp":user.userPfp});
-
+    }catch(error){
+        console.log(error);
+    }
 }
 
 

@@ -40,6 +40,7 @@ const Home = ({ signedIn, hamburger }) => {
       } catch (error) {
         console.log("Error fetching videos:", error);
       }
+      
     };
     fetchData();
   }, []);
@@ -62,7 +63,7 @@ const Home = ({ signedIn, hamburger }) => {
     : videosData.filter((video) => video.category === selectedFilter);
 
   /** -------------------- RENDER -------------------- **/
-  return (
+  return (<div>
     <div className={homeWidth}>
       {/* Filter Bar */}
       <div className={filterWidth}>
@@ -71,8 +72,7 @@ const Home = ({ signedIn, hamburger }) => {
     key={index}
     className={`whitespace-nowrap flex-shrink-0 w-fit h-fit px-3 py-1 rounded-[8px] cursor-pointer transition 
       ${selectedFilter === element ? "bg-gray-800 text-white" : "bg-gray-300 hover:bg-gray-400"}`}
-    onClick={() => setSelectedFilter(element)}
-  >
+    onClick={() => setSelectedFilter(element)}>
     {element}
   </span>
 ))}
@@ -82,11 +82,7 @@ const Home = ({ signedIn, hamburger }) => {
       <div className={videosWidth}>
         {filteredVideos.map((data, index) => {
           const videoUploadDate = new Date(data.uploadDate);
-          const daysAgo = parseInt(
-            (todaysDate.getTime() - videoUploadDate.getTime()) /
-              (24 * 60 * 60 * 1000)
-          );
-
+          const daysAgo = parseInt((todaysDate.getTime() - videoUploadDate.getTime()) /(24 * 60 * 60 * 1000));
           return (
             <VideoSelections
               alignment="col"
@@ -102,6 +98,7 @@ const Home = ({ signedIn, hamburger }) => {
           );
         })}
       </div>
+    </div>
     </div>
   );
 };

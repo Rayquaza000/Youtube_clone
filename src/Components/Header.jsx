@@ -53,7 +53,7 @@ const Header = ({setHamburger, hamburger,signedIn,setSignedIn,user,setUser}) => 
             <FaMicrophone className='w-[20px] h-[20px] m-[10px] sm:hidden'/>
             {signedIn && <div className='bg-gray-300 px-3 py-2 rounded-[20px] flex flex-row items-center cursor-pointer hover:bg-gray-400' onClick={()=>{navigate("/youtubestudio")}}><span className='font-medium line-clamp-1'>+ Create</span></div>}
             <PiDotsThreeOutlineVerticalFill className='w-[20px] h-[20px] m-[10px]'/>
-            {!signedIn && <div className='flex flex-row w-fit h-[30px] items-center justify-center border-gray-300 border-solid border-[1px] m-[10px] mr-[20px] rounded-2xl' onClick={()=>{navigate("/signin")}}>
+            {!signedIn && <div className='flex flex-row w-fit h-[30px] items-center justify-center border-gray-300 border-solid border-[1px] m-[10px] mr-[20px] rounded-2xl cursor-pointer' onClick={()=>{navigate("/signin")}}>
                 <CgProfile className='w-[19px] h-[19px] m-[3px] ml-[5px] text-blue-600'/>
                 <span className='mr-[10px] text-blue-600'>Sign in</span>
             </div>}

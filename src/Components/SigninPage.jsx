@@ -19,9 +19,11 @@ function SigninPage({setSignedIn,user,setUser}) {
             setErrorDisplay('Email not found')
         }
         else{
+            setErrorDisplay(null);
             setEmailFoundStatement("Email found");
             setTimeout(()=>{
                 setEmailFoundStatement(null);
+                
                 setEmailFound(true);
             },2000)
             

@@ -129,19 +129,14 @@ export async function editThisComment(req, res) {
     if (!videodata) {
       return res.status(404).json({ message: "Video not found" });
     }
-
     const commentToBeEdited = videodata.comments.find(
       (com) => com.commentID === req.params.comID
     );
-
     if (!commentToBeEdited) {
       return res.status(404).json({ message: "Comment not found" });
     }
-
     commentToBeEdited.text = req.body.text;
-
     await videodata.save();
-
     return res.status(200).json({
       message: "Comment updated successfully",
       updatedComment: commentToBeEdited,
