@@ -85,10 +85,9 @@ const Home = ({ signedIn, hamburger }) => {
           <span
             key={index}
             className={`whitespace-nowrap flex-shrink-0 w-fit h-fit px-3 py-1 rounded-[8px] cursor-pointer transition 
-              ${
-                selectedFilter === element
-                  ? "bg-gray-800 text-white"
-                  : "bg-gray-300 hover:bg-gray-400"
+              ${selectedFilter === element
+                ? "bg-gray-800 text-white"
+                : "bg-gray-300 hover:bg-gray-400"
               }`}
             onClick={() => setSelectedFilter(element)}
           >
@@ -106,13 +105,13 @@ const Home = ({ signedIn, hamburger }) => {
           const videoUploadDate = new Date(data.uploadDate);
           const daysAgo = parseInt(
             (todaysDate.getTime() - videoUploadDate.getTime()) /
-              (24 * 60 * 60 * 1000)
+            (24 * 60 * 60 * 1000)
           );
 
           return (
             <VideoSelections
               alignment="col"
-              key={index}
+              key={data.videoID}
               videoID={data.videoID}
               title={data.title}
               thumbnailURL={data.thumbnailURL}
@@ -120,6 +119,10 @@ const Home = ({ signedIn, hamburger }) => {
               channelProfilePicture={data.channelProfilePicture}
               views={data.views}
               daysAgo={daysAgo}
+              onVideoDeleted={(deletedId) => {
+                setVideosData((prev) => prev.filter((v) => String(v.videoID) !== String(deletedId)));
+              }}
+
             />
           );
         })}

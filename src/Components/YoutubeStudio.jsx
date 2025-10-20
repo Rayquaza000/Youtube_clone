@@ -18,18 +18,18 @@ import { TiGroupOutline } from "react-icons/ti";
 import { BiCustomize } from "react-icons/bi";
 import { LiaFileAudio } from "react-icons/lia";
 
-function YoutubeStudio({ user, setUser,signedIn, setSignedIn }) {
+function YoutubeStudio({ user, setUser, signedIn, setSignedIn }) {
   const token = localStorage.getItem("accesstoken");
   const [hamburger, setHamburger] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
   const [dropdownValue, setDropdownValue] = useState("");
   const [channelVideos, setChannelVideos] = useState([]);
   const [title, setTitle] = useState("");
-  const [titleMissing,setTitleMissing]=useState(false);
-  const [videoURLMissing,setVideoURLMissing]=useState(false);
-  const [thumbnailURLMissing,setThumbnailURLMissing]=useState(false);
-  const [descriptionMissing,setDescriptionMissing]=useState(false);
-  const [categoryMissing,setCategoryMissing]=useState(false);
+  const [titleMissing, setTitleMissing] = useState(false);
+  const [videoURLMissing, setVideoURLMissing] = useState(false);
+  const [thumbnailURLMissing, setThumbnailURLMissing] = useState(false);
+  const [descriptionMissing, setDescriptionMissing] = useState(false);
+  const [categoryMissing, setCategoryMissing] = useState(false);
   const [videoURL, setVideoURL] = useState("");
   const [thumbnailURL, setThumbnailURL] = useState("");
   const [description, setDescription] = useState("");
@@ -38,14 +38,14 @@ function YoutubeStudio({ user, setUser,signedIn, setSignedIn }) {
   const [newChannelDesc, setNewChannelDesc] = useState("");
   const [newChannelPfp, setNewChannelPfp] = useState("");
   const [channelCreationMsg, setChannelCreationMsg] = useState("");
-  const [uploadingVideo,setUploadingVideo]=useState(false);
-  const [showProfile,setShowProfile]=useState(false);
-  const [category,setCategory]=useState("");
-  const navigate=useNavigate();
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [category, setCategory] = useState("");
+  const navigate = useNavigate();
   const todaysDate = new Date();
 
   /** -------------------- INITIALIZATION -------------------- **/
- useEffect(() => {
+  useEffect(() => {
     // Try getting user from props first
     if (user && user.channels?.length) {
       const savedChannel = localStorage.getItem("currentChannel");
@@ -75,37 +75,37 @@ function YoutubeStudio({ user, setUser,signedIn, setSignedIn }) {
 
   /** -------------------- FETCH VIDEOS WHEN USER + CHANNEL READY -------------------- **/
   // 🧠 One clear responsibility: fetch videos for the current channel
-useEffect(() => {
-  if (!dropdownValue || !token) return;
+  useEffect(() => {
+    if (!dropdownValue || !token) return;
 
-  async function fetchChannelVideos() {
-    try {
-      console.log(dropdownValue);
-      const response = await fetch(
-        `http://localhost:5100/getVideosOfChannel/${dropdownValue}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+    async function fetchChannelVideos() {
+      try {
+        console.log(dropdownValue);
+        const response = await fetch(
+          `http://localhost:5100/getVideosOfChannel/${dropdownValue}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        setChannelVideos(data.videos || []);
+      } catch (err) {
+        console.error("Error fetching videos:", err);
       }
-
-      const data = await response.json();
-      setChannelVideos(data.videos || []);
-    } catch (err) {
-      console.error("Error fetching videos:", err);
     }
-  }
 
-  // Call it
-  fetchChannelVideos();
-}, [dropdownValue, token]);
+    // Call it
+    fetchChannelVideos();
+  }, [dropdownValue, token]);
 
 
   /** -------------------- HANDLE WINDOW RESIZE -------------------- **/
@@ -122,7 +122,7 @@ useEffect(() => {
   /** -------------------- UPLOAD VIDEO -------------------- **/
   async function uploadVideoToSystem() {
     try {
-      
+
       const response2 = await fetch(
         `http://localhost:5100/getChannelFromChannelID/${dropdownValue}`,
         {
@@ -139,28 +139,27 @@ useEffect(() => {
       }
 
       const channelData = await response2.json();
-      if(title=="" || title==null){
+      if (title == "" || title == null) {
         setTitleMissing(true);
-        setTimeout(()=>{setTitleMissing(false);},3000);
+        setTimeout(() => { setTitleMissing(false); }, 3000);
       }
-      if(videoURL=="" || videoURL==null){
+      if (videoURL == "" || videoURL == null) {
         setVideoURLMissing(true);
-        setTimeout(()=>{setVideoURLMissing(false);},3000);
+        setTimeout(() => { setVideoURLMissing(false); }, 3000);
       }
-      if(thumbnailURL=="" || thumbnailURL==null){
+      if (thumbnailURL == "" || thumbnailURL == null) {
         setThumbnailURLMissing(true);
-        setTimeout(()=>{setThumbnailURLMissing(false);},3000);
+        setTimeout(() => { setThumbnailURLMissing(false); }, 3000);
       }
-      if(description=="" || description==null){
+      if (description == "" || description == null) {
         setDescriptionMissing(true);
-        setTimeout(()=>{setDescriptionMissing(false);},3000);
+        setTimeout(() => { setDescriptionMissing(false); }, 3000);
       }
-      if(category=="" || category==null){
+      if (category == "" || category == null) {
         setCategoryMissing(true);
-        setTimeout(()=>{setCategoryMissing(false);},3000);
+        setTimeout(() => { setCategoryMissing(false); }, 3000);
       }
-      if(title=="" || videoURL=="" || thumbnailURL=="" || description=="" || category=="")
-      {
+      if (title == "" || videoURL == "" || thumbnailURL == "" || description == "" || category == "") {
         return
       }
       const response = await fetch("http://localhost:5100/uploadVideo", {
@@ -198,7 +197,7 @@ useEffect(() => {
       setCategory("");
       // reload videos after upload
       setTimeout(() => setDropdownValue(dropdownValue), 500);
-      setTimeout(()=>{setUploadingVideo(false);},2000);
+      setTimeout(() => { setUploadingVideo(false); }, 2000);
     } catch (err) {
       console.error("Upload error:", err);
     }
@@ -251,7 +250,7 @@ useEffect(() => {
         }
       );
 
-      if (!response3.ok){
+      if (!response3.ok) {
         throw new Error(`HTTP error! status: ${response3.status}`);
       }
       const updatedUser = await response3.json();
@@ -269,7 +268,7 @@ useEffect(() => {
     }
   }
 
-  function signOutFromAccount(){
+  function signOutFromAccount() {
     setUser(null);
     setSignedIn(false);
     localStorage.clear();
@@ -337,35 +336,35 @@ useEffect(() => {
           <img src={youtube_icon} className="w-[35px] h-[20px] ml-[15px]" />
           <span className="font-bold text-[20px]">Studio</span>
         </div>
-        <div  className="flex flex-row items-center justify-end">
-        <button
-          className="mr-3 px-3 py-2 bg-gray-300 font-medium rounded-[20px] hover:bg-gray-400"
-          onClick={() => setNewChannelForm(true)}
-        >
-          New channel
-        </button>
-        <img src={user?.userPfp} className='w-[30px] h-[30px] mr-[20px] rounded-[50%]' onClick={()=>{setShowProfile(!showProfile)}}></img>
-        {showProfile && <div className='flex flex-col absolute shadow-sm shadow-black top-[20px] w-[250px] px-3 h-fit right-[60px] bg-white rounded-[8px]'>
-                            <div className='flex flex-row my-3'>
-                                <img src={user.userPfp} className='w-[40px] h-[40px] rounded-[50%] mx-3'/>
-                                <div className='flex flex-col'>
-                                    <span>{user.userName}</span>
-                                    <span className='text-blue-600'>View your channel</span>
-                                    
-                                </div>
-                            </div>
-                            <hr className='text-gray-300'/>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300 '><FaGoogle className='mr-2'/>Google Account</span>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><MdOutlineSwitchAccount className='mr-2'/> Switch account</span>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300' onClick={()=>{signOutFromAccount();}}><GoSignOut className='mr-2' /> Sign out</span>
-                            <hr className='text-gray-300'/>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><SiYoutubestudio className='mr-2'/>YouTube studio</span>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><CiDollar className='mr-2'/> Purchases and memberships</span>
-                            <hr className='text-gray-300'/>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><RiShieldUserLine className='mr-2'/> Your data in YouTube</span>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><LuSettings className='mr-2'/> Settings</span>
-                            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><IoIosHelpCircleOutline className='mr-2'/> Help</span>
-                        </div>}
+        <div className="flex flex-row items-center justify-end">
+          <button
+            className="mr-3 px-3 py-2 bg-gray-300 font-medium rounded-[20px] hover:bg-gray-400"
+            onClick={() => setNewChannelForm(true)}
+          >
+            New channel
+          </button>
+          <img src={user?.userPfp} className='w-[30px] h-[30px] mr-[20px] rounded-[50%]' onClick={() => { setShowProfile(!showProfile) }}></img>
+          {showProfile && <div className='flex flex-col absolute shadow-sm shadow-black top-[20px] w-[250px] px-3 h-fit right-[60px] bg-white rounded-[8px]'>
+            <div className='flex flex-row my-3'>
+              <img src={user.userPfp} className='w-[40px] h-[40px] rounded-[50%] mx-3' />
+              <div className='flex flex-col'>
+                <span>{user.userName}</span>
+                <span className='text-blue-600'>View your channel</span>
+
+              </div>
+            </div>
+            <hr className='text-gray-300' />
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300 '><FaGoogle className='mr-2' />Google Account</span>
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><MdOutlineSwitchAccount className='mr-2' /> Switch account</span>
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300' onClick={() => { signOutFromAccount(); }}><GoSignOut className='mr-2' /> Sign out</span>
+            <hr className='text-gray-300' />
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><SiYoutubestudio className='mr-2' />YouTube studio</span>
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><CiDollar className='mr-2' /> Purchases and memberships</span>
+            <hr className='text-gray-300' />
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><RiShieldUserLine className='mr-2' /> Your data in YouTube</span>
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><LuSettings className='mr-2' /> Settings</span>
+            <span className='flex flex-row items-center my-1 rounded-[5px] px-3 py-1 hover:bg-gray-300'><IoIosHelpCircleOutline className='mr-2' /> Help</span>
+          </div>}
         </div>
       </div>
 
@@ -394,16 +393,16 @@ useEffect(() => {
                   </option>
                 ))}
               </select>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100' onClick={()=>{navigate("/")}}><SlHome className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Youtube Home</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuLayoutDashboard className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Dashboard</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><FaPhotoVideo className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Content</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><MdOutlineAnalytics className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Analytics</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><TiGroupOutline className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Community</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><MdOutlineSubtitles className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Subtitles</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuCopyright className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Copyright</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuDollarSign className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Earn</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><BiCustomize className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Customization</span></button>
-                <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LiaFileAudio className='w-[20px] h-[20px] -translate-y-[3px] '/><span className='ml-[20px]'>Audio Library</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100' onClick={() => { navigate("/") }}><SlHome className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Youtube Home</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuLayoutDashboard className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Dashboard</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><FaPhotoVideo className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Content</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><MdOutlineAnalytics className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Analytics</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><TiGroupOutline className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Community</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><MdOutlineSubtitles className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Subtitles</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuCopyright className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Copyright</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LuDollarSign className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Earn</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><BiCustomize className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Customization</span></button>
+              <button className='active:bg-gray-100 rounded-[5px] self-start flex flex-row items-center justify-start p-1 px-6 mt-5 hover:bg-gray-100'><LiaFileAudio className='w-[20px] h-[20px] -translate-y-[3px] ' /><span className='ml-[20px]'>Audio Library</span></button>
             </div>
           )}
 
@@ -470,7 +469,7 @@ useEffect(() => {
                 const videoUploadDate = new Date(v.uploadDate);
                 const daysAgo = Math.floor(
                   (todaysDate.getTime() - videoUploadDate.getTime()) /
-                    (24 * 60 * 60 * 1000)
+                  (24 * 60 * 60 * 1000)
                 );
                 return (
                   <VideoSelections

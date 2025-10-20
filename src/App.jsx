@@ -1,6 +1,6 @@
-import { useEffect, useState,lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import "./App.css";
-import {createBrowserRouter,RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Components/Home.jsx";
 import CurrentPlayingVideo from "./Components/CurrentPlayingVideo.jsx";
 import MainLayout from "./LayoutComponents/MainLayout.jsx";
@@ -35,7 +35,7 @@ function App() {
   // Router setup
   const appRouter = createBrowserRouter([
     {
-      element: (<MainLayout setHamburger={setHamburger} hamburger={hamburger} signedIn={signedIn} setSignedIn={setSignedIn} user={user} setUser={setUser}/>
+      element: (<MainLayout setHamburger={setHamburger} hamburger={hamburger} signedIn={signedIn} setSignedIn={setSignedIn} user={user} setUser={setUser} />
       ),
       children: [
         {
@@ -44,19 +44,19 @@ function App() {
         },
         {
           path: "/currentplayingvideo/:id",
-          element: <CurrentPlayingVideo signedIn={signedIn} setSignedIn={setSignedIn} user={user} setUser={setUser}/>,
+          element: <CurrentPlayingVideo signedIn={signedIn} setSignedIn={setSignedIn} user={user} setUser={setUser} />,
         },
         {
-          path:"/search/:searchtext",
-          element:<SearchWindow/>
+          path: "/search/:searchtext",
+          element: <SearchWindow />
         }
       ],
     },
     {
-  path: "/signin",
-  element: signedIn ? <Navigate to="/" replace /> :
-           <SigninPage setSignedIn={setSignedIn} user={user} setUser={setUser} />,
-},
+      path: "/signin",
+      element: signedIn ? <Navigate to="/" replace /> :
+        <SigninPage setSignedIn={setSignedIn} user={user} setUser={setUser} />,
+    },
     {
       path: "/signup",
       element: <SignupPage />,
@@ -76,8 +76,8 @@ function App() {
       ),
     },
     {
-      path:"*",
-      element:<ErrorPage/>
+      path: "*",
+      element: <ErrorPage />
     }
   ]);
 
