@@ -37,7 +37,7 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
                         <span className='line-clamp-2 font-bold'>{ title}</span>
                         <span className='text-gray-500'>{channelName}</span>
                         <div className='flex flex-row'>
-                            <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}>{views > 1000?(views > 1000000?(views/100000+"M"):(views/1000)+"k"):views } Views&nbsp;.</span>
+                            <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}>{views > 1000?(views > 1000000?(Math.floor(views/100000)+"M"):Math.floor(views/1000)+"k"):views } Views&nbsp;.</span>
                             <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}> &nbsp;{daysAgo} days ago</span>
                         </div>
                     </div>
@@ -60,7 +60,7 @@ function VideoSelections({alignment,videoID,title,thumbnailURL,channelName,chann
                         {currentPath.slice(0,20)=="/currentplayingvideo"?<span className='line-clamp-2 font-bold text-[14px]'>{title}</span>:<span className='line-clamp-2 font-bold'>{title}</span>}
                         <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}>{channelName}</span>
                         <div className='flex flex-row'>
-                            <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}>{views > 1000?(views > 1000000?(views/100000+"M"):(views/1000)+"k"):views } Views&nbsp;.</span>
+                            <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}>{views > 1000?(views > 1000000?(Math.floor(views/100000)+"M"):Math.floor(views/1000)+"k"):views } Views&nbsp;.</span>
                             <span className={currentPath.slice(0,20)=="/currentplayingvideo"?'text-gray-500 text-[13px] line-clamp-1':'text-gray-500'}> &nbsp;{daysAgo} days ago</span>
                         </div>
                     </div>
