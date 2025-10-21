@@ -40,3 +40,5 @@ Features in this project:
  Look out for small features like- when you click on any video its view count increases by 1, while hovering above any button the curson changes to a pointer.
 
  Enter the details correctly. For eg: enter email correctly with a "@" and ".com" in email field or else it will give an error.
+
+ The video showcasing the usage of the project, is also present in this folder
