@@ -26,13 +26,6 @@ function App() {
     }
   }, []);
 
-  //lazy loading
-  // const MainLayout=lazy(()=>import("../src/LayoutComponents/MainLayout.jsx"));
-  // const Home=lazy(()=>import("./Components/Home.jsx"));
-  // const CurrentPlayingVideo=lazy(()=>import("./Components/CurrentPlayingVideo.jsx"));
-  // const SearchWindow=lazy(()=>import("./Components/SearchWindow.jsx"));
-  // const YoutubeStudio=lazy(()=>import("./Components/YoutubeStudio.jsx"))
-  // Router setup
   const appRouter = createBrowserRouter([
     {
       element: (<MainLayout setHamburger={setHamburger} hamburger={hamburger} signedIn={signedIn} setSignedIn={setSignedIn} user={user} setUser={setUser} />
