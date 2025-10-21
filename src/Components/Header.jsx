@@ -58,7 +58,7 @@ const Header = ({ setHamburger, hamburger, signedIn, setSignedIn, user, setUser 
                 </div>}
                 {signedIn && <img src={user.userPfp} className='w-[30px] h-[30px] mr-[20px] rounded-[50%] cursor-pointer' onClick={() => { setShowProfile(!showProfile) }} />}
 
-                {showProfile && <div className='flex flex-col absolute shadow-sm shadow-black top-[20px] w-[250px] px-3 h-fit right-[60px] bg-white rounded-[8px]'>
+                {showProfile && <div className='z-70 flex flex-col absolute shadow-sm shadow-black top-[20px] w-[250px] px-3 h-fit right-[60px] bg-white rounded-[8px]'>
                     <div className='flex flex-row my-3'>
                         <img src={user.userPfp} className='w-[40px] h-[40px] rounded-[50%] mx-3' />
                         <div className='flex flex-col'>

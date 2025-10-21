@@ -22,8 +22,21 @@ Guide to use the project website:
 9. There is search functionality where you can search for any video.(type the search word correctly in the search bar or else the videos wont display if there is a spelling mistake).
 10. Finally you can sign out of your account by clicking on your profile in the top right corner and clicking the sign out button.
  
+Features in this project:
+1. Upload videos(enter meta data of any video from youtube).
+2. Delete videos.
+3. Watch Videos
+4. Read Comments.
+5. Make Comments.
+6. Edit comments.
+7. Delete comments.
+8. Signup/ Signin/ Signout user.
+9. Search functionality.
+10. Filter by categories.
+11. Create channel.
+12. Switch to a different channel of the same account.
+13. See related videos(Not actually related videos but dummy data).
 
-
- Look out for small features like: when you click on any video its view count increases by 1, while hovering above any button the curson changes to a pointer.
+ Look out for small features like- when you click on any video its view count increases by 1, while hovering above any button the curson changes to a pointer.
 
  Enter the details correctly. For eg: enter email correctly with a "@" and ".com" in email field or else it will give an error.
